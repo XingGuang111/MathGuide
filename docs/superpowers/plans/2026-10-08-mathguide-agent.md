@@ -377,7 +377,7 @@ def get_formula_by_id(kp_id, db_path=None):
 
 
 def find_formula_by_alias(name, db_path=None):
-    """别名精确查 → LIKE 包含查，命中后返回对应公式行；未命中返回 None"""
+    """别名精确查 → 别名 LIKE 包含查 → 知识点名 LIKE 包含查；未命中返回 None"""
     with _conn(db_path) as conn:
         row = conn.execute(
             "SELECT standard_kp FROM kp_alias WHERE alias_name=?", (name,)
@@ -385,6 +385,11 @@ def find_formula_by_alias(name, db_path=None):
         if row is None:
             row = conn.execute(
                 "SELECT standard_kp FROM kp_alias WHERE ? LIKE '%' || alias_name || '%' LIMIT 1",
+                (name,),
+            ).fetchone()
+        if row is None:
+            row = conn.execute(
+                "SELECT knowledge_point AS standard_kp FROM math_formula WHERE ? LIKE '%' || knowledge_point || '%' LIMIT 1",
                 (name,),
             ).fetchone()
         if row is None:

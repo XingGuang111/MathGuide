@@ -457,3 +457,34 @@ Vue3前端 + FastAPI后端，模块化拆分（OCR模块、Agent模块、数据�
 同时我们规避大模型短板：公式、精确计算交给传统程序和数据库，减少幻觉。
 和市面上直接给答案的搜题软件相比，系统以启发式教学为核心，引导学生自主思考；并且本地离线部署，保护学习隐私。
 如果你需要，我可以帮你写系统创新点小节，直接粘贴进论文。
+
+---
+
+# 精简版运行指南（已实现代码）
+
+本仓库当前实现了方案中的**精简版终端 Agent**（详见 `docs/superpowers/specs/2026-10-08-mathguide-agent-design.md`）。
+
+## 功能
+
+- 文字输入 或 `/photo 图片路径` 拍照搜题（RapidOCR 离线识别，可人工修正）
+- 自动识别知识点与题型，从本地 50 条公式库查表展示（杜绝公式幻觉）
+- 苏格拉底式启发对话：AI 老师只提问不给答案，引导学生自己解出
+- 自动归档学习记录，支持 `/history` 按日期/题型回看、`/stats` 薄弱知识点统计
+
+## 部署运行
+
+1. 安装 Ollama：https://ollama.com/download
+2. `ollama pull qwen2.5:1.5b`（约 1GB；内存充足可改 config.py 用 qwen2.5:3b）
+3. `pip install -r requirements.txt`
+4. `python main.py`
+
+首次使用 OCR 时 RapidOCR 会自动下载识别模型（约 20MB，一次性）。
+
+## 测试
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests/ -v
+```
+
+真机联调清单见 `docs/manual-test.md`。

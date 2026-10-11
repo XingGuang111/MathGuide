@@ -64,6 +64,9 @@ class TutorAgent:
         self.messages = [
             {"role": "system", "content": prompts.build_tutor_system_prompt(question_text, self.card)}
         ]
+        self.dialogue = []
+        self.rounds = 0
+        self.finished = False
         self.state = AgentState.FORMULA_SHOWN
         return {"ok": True, "card": self.card, "question_type": self.question_type, "message": ""}
 

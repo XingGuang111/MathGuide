@@ -69,6 +69,26 @@ def test_max_rounds_fallback(tmp_path):
     assert rows[0]["understood"] == 0  # 超轮数兜底
 
 
+def test_second_session_starts_clean(tmp_path):
+    a, p = _new_agent(tmp_path)
+    _start_ok(a)
+    with patch("agent.llm.chat_stream", return_value=iter(["对啦！[UNDERSTOOD]"])):
+        "".join(a.reply("12乘8等于96"))
+    assert a.finished is True  # 会话 1 已结束
+    r2 = _start_ok(a)
+    assert r2["ok"] is True
+    assert a.rounds == 0
+    assert a.dialogue == []
+    assert a.finished is False
+    with patch("agent.llm.chat_stream", return_value=iter(["答对了！[UNDERSTOOD]"])):
+        "".join(a.reply("第二题的学生回答"))
+    rows = db.query_history(db_path=p)
+    assert len(rows) == 2
+    assert "12乘8等于96" in rows[0]["dialogue_log"]
+    assert "第二题的学生回答" in rows[1]["dialogue_log"]
+    assert "12乘8等于96" not in rows[1]["dialogue_log"]  # 会话 2 不混入会话 1
+
+
 def test_abort(tmp_path):
     a, p = _new_agent(tmp_path)
     _start_ok(a)

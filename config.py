@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
-"""MathGuide 全局配置常量"""
+"""MathGuide 全局配置常量。"""
 
-# 本地大模型（Ollama），可改 "qwen2.5:3b" 获得更好效果
-MODEL_NAME = "qwen2.5:1.5b"
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent
+
+# 本地大模型（Ollama）。服务端当前已加载 Qwen2.5-3B Q4_K_M。
+MODEL_NAME = "mathguide-qwen25-3b:latest"
 
 # 数据文件路径
-DB_PATH = "data/mathguide.db"
-FORMULAS_JSON = "data/formulas.json"
+DB_PATH = str(BASE_DIR / "data" / "mathguide.db")
+FORMULAS_JSON = str(BASE_DIR / "data" / "formulas.json")
 
 # 单题最大引导轮数，超过则兜底讲解，防止无限对话
 MAX_GUIDE_ROUNDS = 12

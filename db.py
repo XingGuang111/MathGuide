@@ -2,6 +2,7 @@
 """SQLite 数据访问层：公式库、别名表、学习记录"""
 import json
 import sqlite3
+import zlib
 from pathlib import Path
 
 import config
@@ -31,6 +32,19 @@ CREATE TABLE IF NOT EXISTS study_record (
     understood INTEGER,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS practice_exercise (
+    id TEXT PRIMARY KEY,
+    knowledge_id INTEGER NOT NULL,
+    payload TEXT NOT NULL,
+    hinted INTEGER NOT NULL DEFAULT 0,
+    answer TEXT,
+    correct INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    answered_at TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS practice_knowledge_time
+ON practice_exercise(knowledge_id, answered_at);
+CREATE INDEX IF NOT EXISTS study_date_type ON study_record(record_date, question_type);
 """
 
 
@@ -117,7 +131,7 @@ def save_record(record, db_path=None):
             (
                 record["session_id"], record["record_date"], record["question_type"],
                 record["question_text"], record["knowledge_point"], record["formula"],
-                record["dialogue_log"], record["understood"],
+                encode_dialogue(record["dialogue_log"]), record["understood"],
             ),
         )
         return cur.lastrowid
@@ -134,14 +148,32 @@ def query_history(date=None, qtype=None, db_path=None):
         params.append(qtype)
     if conds:
         sql += " WHERE " + " AND ".join(conds)
-    sql += " ORDER BY create_time DESC"
+    sql += " ORDER BY create_time DESC, id DESC"
     with _conn(db_path) as conn:
         rows = conn.execute(sql, params).fetchall()
-    return [dict(r) for r in rows]
+    result = [dict(r) for r in rows]
+    for row in result:
+        row["dialogue_log"] = decode_dialogue(row["dialogue_log"])
+    return result
+
+
+def encode_dialogue(text):
+    """版本前缀区分压缩BLOB；短文本保留原文，只有节省空间时才压缩。"""
+    raw = text.encode("utf-8")
+    packed = b"MGZ1" + zlib.compress(raw, level=6)
+    return packed if len(packed) < len(raw) else text
+
+
+def decode_dialogue(value):
+    if isinstance(value, bytes):
+        if not value.startswith(b"MGZ1"):
+            raise ValueError("未知的学习记录编码")
+        return zlib.decompress(value[4:]).decode("utf-8")
+    return value
 
 
 def weak_stats(db_path=None):
-    """按知识点统计：总练习数与未独立理解数，按未理解数降序"""
+    """历史次数不变，融合专项作答计算复习优先分与初步巩固状态。"""
     with _conn(db_path) as conn:
         rows = conn.execute(
             """SELECT knowledge_point,
@@ -151,4 +183,33 @@ def weak_stats(db_path=None):
                GROUP BY knowledge_point
                ORDER BY not_understood DESC, total DESC"""
         ).fetchall()
-    return [dict(r) for r in rows]
+        practiced = conn.execute(
+            "SELECT knowledge_id, correct, hinted FROM practice_exercise "
+            "WHERE correct IS NOT NULL ORDER BY answered_at, rowid"
+        ).fetchall()
+        formulas = conn.execute("SELECT id, knowledge_point FROM math_formula").fetchall()
+    result = {r['knowledge_point']: dict(r) for r in rows}
+    names = {r['id']: r['knowledge_point'] for r in formulas}
+    for row in result.values():
+        row.update(practice_total=0, independent_correct=0, streak=0,
+                   weak_score=row['not_understood'] * 2)
+    for attempt in practiced:
+        name = names.get(attempt['knowledge_id'])
+        if not name:
+            continue
+        row = result.setdefault(name, dict(knowledge_point=name, total=0,
+            not_understood=0, practice_total=0, independent_correct=0,
+            streak=0, weak_score=0))
+        independent = bool(attempt['correct']) and not attempt['hinted']
+        row['practice_total'] += 1
+        row['independent_correct'] += int(independent)
+        row['streak'] = row['streak'] + 1 if independent else 0
+        row['weak_score'] = max(0, row['weak_score'] - 1) if independent else row['weak_score'] + 2
+        if row['streak'] >= 3:
+            row['weak_score'] = 0
+    for row in result.values():
+        row['practice_status'] = ('初步巩固' if row['streak'] >= 3 else
+                                  '继续复习' if row['practice_total'] else '待练习')
+        if row['practice_total'] and row['streak'] < 3:
+            row['weak_score'] = max(1, row['weak_score'])
+    return sorted(result.values(), key=lambda r: (-r['weak_score'], -r['not_understood'], r['knowledge_point']))

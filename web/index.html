@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MathGuide 小学数学启发式辅导</title>
+  <style>
+    :root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#233044;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}.shell{max-width:1120px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.brand h1{margin:0;color:#2365d3}.brand p{margin:6px 0 0;color:#667085}.health{padding:8px 12px;border-radius:99px;background:#fff;box-shadow:0 2px 12px #19355d12}.grid{display:grid;grid-template-columns:1fr 310px;gap:18px}.panel{background:#fff;border-radius:18px;box-shadow:0 8px 28px #19355d12;overflow:hidden}.chat{height:62vh;min-height:440px;padding:22px;overflow:auto}.msg{max-width:82%;padding:12px 15px;border-radius:15px;margin:9px 0;white-space:pre-wrap;line-height:1.65}.teacher{background:#eef4ff}.student{background:#2365d3;color:#fff;margin-left:auto}.composer{border-top:1px solid #e8edf5;padding:14px;display:flex;gap:10px}textarea{flex:1;resize:none;border:1px solid #ccd5e3;border-radius:12px;padding:12px;font:inherit}button,.upload{border:0;border-radius:11px;padding:11px 16px;background:#2365d3;color:#fff;font:inherit;cursor:pointer}.secondary{background:#e9eef7;color:#334155}.side{padding:20px}.card{background:#f7f9fc;border-radius:14px;padding:15px;margin-bottom:14px}.card h3{margin:0 0 10px;color:#2365d3}.card p{margin:7px 0;line-height:1.55}.muted{color:#778397}.upload{display:inline-block;background:#12a594}.hidden{display:none}.stats{padding:0;margin:0;list-style:none}.stats li{padding:8px 0;border-bottom:1px solid #edf0f5}#alert-banner{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-8px);background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:10px;padding:10px 18px;box-shadow:0 6px 20px #19355d22;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;font-size:14px}#alert-banner.show{opacity:1;transform:translateX(-50%) translateY(0)}.grade{color:#07875d;font-weight:600}.temp-badge{display:inline-block;background:#fef3c7;color:#92400e;border-radius:6px;padding:2px 8px;font-size:12px;margin-bottom:4px}@media(max-width:800px){.grid{grid-template-columns:1fr}.chat{height:55vh}.top{align-items:flex-start;gap:12px}.health{font-size:12px}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <div id="alert-banner" role="status" aria-live="polite"></div>
+  <header class="top"><div class="brand"><h1>MathGuide</h1><p>不直接给答案，陪你一步一步想明白</p></div><div id="health" class="health">正在检查模型…</div></header>
+  <div class="grid">
+    <section class="panel">
+      <div id="chat" class="chat"><div class="msg teacher">你好！把小学数学题发给我，或者上传题目照片吧。</div></div>
+      <div class="composer">
+        <textarea id="input" rows="2" maxlength="2000" aria-label="题目或回答" placeholder="输入题目或你的解题思路…"></textarea>
+        <button id="send">发送</button>
+      </div>
+    </section>
+    <aside class="panel side">
+      <div class="card"><h3>拍照搜题</h3><p class="muted">识别后可先修改题目，再开始辅导。</p><label class="upload">选择图片<input id="photo" class="hidden" type="file" accept="image/png,image/jpeg,image/bmp"></label></div>
+      <div id="formula" class="card"><h3>知识卡片</h3><p class="muted">开始题目后显示对应公式与易错提示。</p></div>
+      <div class="card"><h3>薄弱点</h3><ul id="stats" class="stats"><li class="muted">暂无学习记录</li></ul></div>
+      <button id="new" class="secondary">换一道题</button>
+      <button id="history" class="secondary">学习记录</button>
+      <button id="practice" class="secondary" style="margin-top:10px">薄弱点专项练习</button>
+    </aside>
+  </div>
+</main>
+
+<dialog id="records" style="width:min(850px,95vw);max-height:85vh;border:0;border-radius:16px;padding:24px">
+<h2>学习记录</h2><form id="filters"><label>日期 <input id="record-date" type="date"></label> <label>题型 <select id="record-type"><option value="">全部题型</option><option>计算题</option><option>几何应用题</option><option>行程应用题</option><option>百分数应用题</option><option>单位换算题</option><option>平均数应用题</option></select></label> <button>查询</button> <button type="button" id="close-records" class="secondary">关闭</button></form><p id="record-status" role="status"></p><div id="record-list"></div><div id="record-detail"></div>
+</dialog>
+<dialog id="practice-dialog" style="width:min(720px,95vw);max-height:85vh;border:0;border-radius:16px;padding:24px">
+  <h2>薄弱点专项练习</h2>
+  <p class="muted">自动优先安排需要复习的知识点。连续独立答对3题标为初步巩固，仅供复习参考。</p>
+  <h3 id="practice-topic"></h3><p id="practice-question" style="font-size:20px;line-height:1.7"></p>
+  <form id="practice-form"><label>你的答案 <input id="practice-answer" maxlength="100" autocomplete="off" required placeholder="填写数值或分数"></label> <span id="practice-unit"></span> <button id="practice-submit">提交答案</button></form>
+  <p id="practice-feedback" role="status" style="white-space:pre-wrap;line-height:1.7"></p>
+  <button id="practice-hint" class="secondary">查看提示</button>
+  <button id="practice-next">下一道改编题</button>
+  <button id="practice-close" class="secondary">关闭</button>
+</dialog>
+<script src="/app.js"></script>
+</body>
+</html>

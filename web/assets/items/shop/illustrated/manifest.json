@@ -1,0 +1,184 @@
+{
+  "rice": {
+    "source": "original MathGuide vector illustration",
+    "svg": "rice.svg",
+    "png": "rice.png",
+    "animation": "food_rice",
+    "contains_character": false
+  },
+  "breakfast": {
+    "source": "original MathGuide vector illustration",
+    "svg": "breakfast.svg",
+    "png": "breakfast.png",
+    "animation": "food_breakfast",
+    "contains_character": false
+  },
+  "lunch": {
+    "source": "original MathGuide vector illustration",
+    "svg": "lunch.svg",
+    "png": "lunch.png",
+    "animation": "food_lunch",
+    "contains_character": false
+  },
+  "dinner": {
+    "source": "original MathGuide vector illustration",
+    "svg": "dinner.svg",
+    "png": "dinner.png",
+    "animation": "food_dinner",
+    "contains_character": false
+  },
+  "icecream": {
+    "source": "original MathGuide vector illustration",
+    "svg": "icecream.svg",
+    "png": "icecream.png",
+    "animation": "food_icecream",
+    "contains_character": false
+  },
+  "crab": {
+    "source": "original MathGuide vector illustration",
+    "svg": "crab.svg",
+    "png": "crab.png",
+    "animation": "food_crab",
+    "contains_character": false
+  },
+  "tanghulu": {
+    "source": "original MathGuide vector illustration",
+    "svg": "tanghulu.svg",
+    "png": "tanghulu.png",
+    "animation": "food_tanghulu",
+    "contains_character": false
+  },
+  "noodles": {
+    "source": "original MathGuide vector illustration",
+    "svg": "noodles.svg",
+    "png": "noodles.png",
+    "animation": "food_noodles",
+    "contains_character": false
+  },
+  "watermelon": {
+    "source": "original MathGuide vector illustration",
+    "svg": "watermelon.svg",
+    "png": "watermelon.png",
+    "animation": "food_watermelon",
+    "contains_character": false
+  },
+  "hotpot": {
+    "source": "original MathGuide vector illustration",
+    "svg": "hotpot.svg",
+    "png": "hotpot.png",
+    "animation": "food_hotpot",
+    "contains_character": false
+  },
+  "token_snack": {
+    "source": "original MathGuide vector illustration",
+    "svg": "token_snack.svg",
+    "png": "token_snack.png",
+    "animation": "token",
+    "contains_character": false
+  },
+  "mooncake": {
+    "source": "original MathGuide vector illustration",
+    "svg": "mooncake.svg",
+    "png": "mooncake.png",
+    "animation": "food_mooncake",
+    "contains_character": false
+  },
+  "zongzi": {
+    "source": "original MathGuide vector illustration",
+    "svg": "zongzi.svg",
+    "png": "zongzi.png",
+    "animation": "food_zongzi",
+    "contains_character": false
+  },
+  "niangao": {
+    "source": "original MathGuide vector illustration",
+    "svg": "niangao.svg",
+    "png": "niangao.png",
+    "animation": "food_niangao",
+    "contains_character": false
+  },
+  "qingtuan": {
+    "source": "original MathGuide vector illustration",
+    "svg": "qingtuan.svg",
+    "png": "qingtuan.png",
+    "animation": "food_qingtuan",
+    "contains_character": false
+  },
+  "laba": {
+    "source": "original MathGuide vector illustration",
+    "svg": "laba.svg",
+    "png": "laba.png",
+    "animation": "food_laba",
+    "contains_character": false
+  },
+  "chongyang": {
+    "source": "original MathGuide vector illustration",
+    "svg": "chongyang.svg",
+    "png": "chongyang.png",
+    "animation": "food_chongyang",
+    "contains_character": false
+  },
+  "tangyuan": {
+    "source": "original MathGuide vector illustration",
+    "svg": "tangyuan.svg",
+    "png": "tangyuan.png",
+    "animation": "food_tangyuan",
+    "contains_character": false
+  },
+  "dumplings": {
+    "source": "original MathGuide vector illustration",
+    "svg": "dumplings.svg",
+    "png": "dumplings.png",
+    "animation": "food_dumplings",
+    "contains_character": false
+  },
+  "cube": {
+    "source": "original MathGuide vector illustration",
+    "svg": "cube.svg",
+    "png": "cube.png",
+    "animation": "toy_cube",
+    "contains_character": false
+  },
+  "toy_car": {
+    "source": "original MathGuide vector illustration",
+    "svg": "toy_car.svg",
+    "png": "toy_car.png",
+    "animation": "toy_toy_car",
+    "contains_character": false
+  },
+  "balloon": {
+    "source": "original MathGuide vector illustration",
+    "svg": "balloon.svg",
+    "png": "balloon.png",
+    "animation": "toy_balloon",
+    "contains_character": false
+  },
+  "kite": {
+    "source": "original MathGuide vector illustration",
+    "svg": "kite.svg",
+    "png": "kite.png",
+    "animation": "toy_kite",
+    "contains_character": false
+  },
+  "spinning_top": {
+    "source": "original MathGuide vector illustration",
+    "svg": "spinning_top.svg",
+    "png": "spinning_top.png",
+    "animation": "toy_spinning_top",
+    "contains_character": false
+  },
+  "swing": {
+    "source": "original MathGuide vector illustration",
+    "svg": "swing.svg",
+    "png": "swing.png",
+    "animation": "toy_swing",
+    "contains_character": false
+  },
+  "rocking_horse": {
+    "source": "original MathGuide vector illustration",
+    "svg": "rocking_horse.svg",
+    "png": "rocking_horse.png",
+    "animation": "toy_rocking_horse",
+    "contains_character": false
+  }
+}

@@ -45,6 +45,62 @@ CREATE TABLE IF NOT EXISTS practice_exercise (
 CREATE INDEX IF NOT EXISTS practice_knowledge_time
 ON practice_exercise(knowledge_id, answered_at);
 CREATE INDEX IF NOT EXISTS study_date_type ON study_record(record_date, question_type);
+CREATE TABLE IF NOT EXISTS homework_review (
+    id TEXT PRIMARY KEY,
+    fingerprint TEXT NOT NULL UNIQUE,
+    item_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    assignment_date TEXT NOT NULL,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    analysis TEXT NOT NULL,
+    reflection TEXT NOT NULL DEFAULT '',
+    in_notes INTEGER NOT NULL DEFAULT 0,
+    in_mistakes INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+);
+CREATE INDEX IF NOT EXISTS homework_review_item ON homework_review(item_id, created_at);
+CREATE TABLE IF NOT EXISTS homework_assignment (
+    id TEXT PRIMARY KEY,
+    revision INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    assignment_date TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+CREATE INDEX IF NOT EXISTS homework_assignment_date ON homework_assignment(assignment_date);
+CREATE TABLE IF NOT EXISTS homework_item_owner (
+    item_id TEXT PRIMARY KEY,
+    assignment_id TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS homework_tutor_link (
+    item_id TEXT PRIMARY KEY,
+    question TEXT NOT NULL,
+    session_id TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS homework_source (
+    id TEXT PRIMARY KEY,
+    digest TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
+    image BLOB NOT NULL,
+    width INTEGER NOT NULL,
+    height INTEGER NOT NULL,
+    result TEXT,
+    error TEXT NOT NULL DEFAULT ''
+);
+CREATE TABLE IF NOT EXISTS homework_visual_turn (
+    id TEXT PRIMARY KEY,
+    item_id TEXT NOT NULL,
+    context_key TEXT NOT NULL,
+    student TEXT NOT NULL,
+    teacher TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+CREATE INDEX IF NOT EXISTS homework_visual_context ON homework_visual_turn(item_id,context_key,created_at);
+CREATE TABLE IF NOT EXISTS homework_visual_solution (
+    id TEXT PRIMARY KEY,
+    payload TEXT NOT NULL
+);
 """
 
 
@@ -60,6 +116,11 @@ def init_db(db_path=None):
     """建表（幂等）；公式表为空时从 formulas.json 导入公式与别名"""
     with _conn(db_path) as conn:
         conn.executescript(SCHEMA)
+        columns = {row['name'] for row in conn.execute('PRAGMA table_info(homework_review)')}
+        if 'attachment_key' not in columns:
+            conn.execute("ALTER TABLE homework_review ADD COLUMN attachment_key TEXT NOT NULL DEFAULT ''")
+        if 'attachments' not in columns:
+            conn.execute("ALTER TABLE homework_review ADD COLUMN attachments TEXT NOT NULL DEFAULT '[]'")
         count = conn.execute("SELECT COUNT(*) AS c FROM math_formula").fetchone()["c"]
         if count == 0:
             with open(config.FORMULAS_JSON, encoding="utf-8") as f:
@@ -190,6 +251,7 @@ def weak_stats(db_path=None):
         formulas = conn.execute("SELECT id, knowledge_point FROM math_formula").fetchall()
     result = {r['knowledge_point']: dict(r) for r in rows}
     names = {r['id']: r['knowledge_point'] for r in formulas}
+    ids = {r['knowledge_point']: r['id'] for r in formulas}
     for row in result.values():
         row.update(practice_total=0, independent_correct=0, streak=0,
                    weak_score=row['not_understood'] * 2)
@@ -208,6 +270,7 @@ def weak_stats(db_path=None):
         if row['streak'] >= 3:
             row['weak_score'] = 0
     for row in result.values():
+        row['knowledge_id'] = ids.get(row['knowledge_point'])
         row['practice_status'] = ('初步巩固' if row['streak'] >= 3 else
                                   '继续复习' if row['practice_total'] else '待练习')
         if row['practice_total'] and row['streak'] < 3:

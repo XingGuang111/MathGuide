@@ -28,4 +28,30 @@ def test_tutor_prompt_rules_and_tags():
 def test_tutor_prompt_without_card():
     p = prompts.build_tutor_system_prompt("题目文本", None)
     assert "题目文本" in p
-    assert "公式" not in p.split("规则")[0]  # 无公式段落
+    assert "【核心公式】" not in p
+    assert "【学生易错点】" not in p
+
+
+def test_stage_prompts_keep_separate_goals():
+    question = "一件衣服原价80元，打八折，现价是多少？"
+    card = {"knowledge_point": "折扣", "formula": "现价=原价×折扣", "easy_tip": "八折是80%"}
+    first = prompts.build_stage1_prompt(question)
+    second = prompts.build_stage2_prompt(question, card)
+    third = prompts.build_stage3_prompt(question, card)
+    assert "第一步：读懂题目" in first
+    assert card["formula"] not in first
+    assert "第二步：找方法" in second and card["formula"] in second
+    assert "第三步：列式计算" in third and card["formula"] in third
+    for prompt in (first, second, third):
+        assert question in prompt
+        assert "面积" not in prompt  # 折扣题不能被提示词里的无关例子带偏。
+        assert prompts.TAG_CONTINUE in prompt and prompts.TAG_UNDERSTOOD in prompt
+
+
+def test_understanding_hint_explains_only_the_requested_word():
+    question = '一件衣服原价80元，打八折，现价是多少？'
+    hint = prompts.build_understanding_hint(question, '不懂八折是什么意思')
+    assert '每10元' in hint and '8元' in hint
+    assert '面积' not in hint and '64' not in hint
+    assert hint.count('？') == 1
+    assert prompts.build_understanding_hint('班上有36个学生，要分组', '不知道') is None

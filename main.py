@@ -130,7 +130,7 @@ def main():
     tutor = agent_mod.TutorAgent()
     while True:
         try:
-            guiding = tutor.state == agent_mod.AgentState.GUIDING
+            guiding = tutor.state in agent_mod.GUIDING_STATES
             text = input(("你> " if guiding else "题目> ")).strip()
         except (EOFError, KeyboardInterrupt):
             print("\n再见！")

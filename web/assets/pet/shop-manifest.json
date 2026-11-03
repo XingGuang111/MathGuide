@@ -1,0 +1,184 @@
+{
+  "repository": "https://github.com/PC2005-cloud/dsh-pet",
+  "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+  "clips": {
+    "food_rice": {
+      "file": "food_rice.webm",
+      "source": "吃白饭.webm",
+      "git_blob": "0f400023c2f036e6edc28033083d49f68686d347",
+      "sha256": "b620413d6fa303a0ed9168dc71453c3bddc10141a0b7edeff87dc2e6e054d502",
+      "bytes": 459590
+    },
+    "food_breakfast": {
+      "file": "food_breakfast.webm",
+      "source": "吃早餐.webm",
+      "git_blob": "6691dc43900e3f906b6576cc6eb7e0f23b0e2702",
+      "sha256": "893b61587aeda8ca146e32b596b00903461aab04684a146d84b31965968d60e4",
+      "bytes": 441484
+    },
+    "food_lunch": {
+      "file": "food_lunch.webm",
+      "source": "吃午餐.webm",
+      "git_blob": "83618038d3d4fe98b9f42d0fd7ae1b7a24f686b3",
+      "sha256": "e48a70e61d93195c611c2d4041be32a26a114f78c835ff6b2345459ae39a90ce",
+      "bytes": 495122
+    },
+    "food_dinner": {
+      "file": "food_dinner.webm",
+      "source": "吃晚餐.webm",
+      "git_blob": "14f9eee2a361a592fd55c95979f5810b7b8dcd03",
+      "sha256": "8902602fb012c29d33392822ab534ed119a136610f6bc2e8c0c51d60afec673a",
+      "bytes": 741965
+    },
+    "food_icecream": {
+      "file": "food_icecream.webm",
+      "source": "吃冰淇淋融化.webm",
+      "git_blob": "c696cf2f61366cd9ba973aae1526dbf920c3d85d",
+      "sha256": "17d73682926d6ce4203ad12d9049527e604d448bcc5c82ac5b12950b4ceb0447",
+      "bytes": 509816
+    },
+    "food_crab": {
+      "file": "food_crab.webm",
+      "source": "吃大闸蟹.webm",
+      "git_blob": "f8e0774d6b4b38f27adfecdfc591dd40812f5e38",
+      "sha256": "fbd0f445c15fda1f827e6eb485270ddf9025ac29b3edcac28a5eff7d9aa80f46",
+      "bytes": 545299
+    },
+    "food_tanghulu": {
+      "file": "food_tanghulu.webm",
+      "source": "吃糖葫芦.webm",
+      "git_blob": "def3fa70022f6b728f0d0b3ebbfcff601c406c57",
+      "sha256": "6900468dc166bfb90e1cfb73de9b41a08c62513483ce1300658340cf942be3cd",
+      "bytes": 469809
+    },
+    "food_noodles": {
+      "file": "food_noodles.webm",
+      "source": "吃长寿面.webm",
+      "git_blob": "ac71008a07686f858627e7f7f69e77448941bb97",
+      "sha256": "2881e1cd4ca31fd56ca578ce2ee73d21222f0006f237c865d9b2dc1ebc436edd",
+      "bytes": 489038
+    },
+    "food_watermelon": {
+      "file": "food_watermelon.webm",
+      "source": "吃西瓜.webm",
+      "git_blob": "ffa2c36e86e9056a7e965c73364a50c1fd8bb192",
+      "sha256": "0dd992fb7fb51d707d6589cb813a450437a2bd54046709f424a73353e2d7f78d",
+      "bytes": 482918
+    },
+    "food_hotpot": {
+      "file": "food_hotpot.webm",
+      "source": "涮火锅.webm",
+      "git_blob": "d3e99cf6d8694b5e83a3957793f8fc7a0fc2cc2a",
+      "sha256": "f0b345c22cf2841137d215a7b9d50252b8be0ede64887e91fdc9bd09843e3c8f",
+      "bytes": 466547
+    },
+    "food_mooncake": {
+      "file": "food_mooncake.webm",
+      "source": "中秋赏月吃月饼.webm",
+      "git_blob": "48beff57ddc5b3c7e1c0387348e33ce8e3a5b819",
+      "sha256": "3f64003262d3f129470721495695ecd231795d859693a748914c02c6e3883a3a",
+      "bytes": 512341
+    },
+    "food_zongzi": {
+      "file": "food_zongzi.webm",
+      "source": "吃粽子.webm",
+      "git_blob": "6ad057c473cbaf209de8d4ec91781d9bc759cda9",
+      "sha256": "f3af3217674427fdc5609bf50b170f69669c84cf229cd7b44261c00da7876ade",
+      "bytes": 446268
+    },
+    "food_niangao": {
+      "file": "food_niangao.webm",
+      "source": "吃年糕.webm",
+      "git_blob": "7b4473435dfa219428f5bb2e1dbf34fe83b59190",
+      "sha256": "ba0c86988687801a5b19d055d728bb182c8a95a0bdd7071dea16b83c1162135c",
+      "bytes": 451257
+    },
+    "food_qingtuan": {
+      "file": "food_qingtuan.webm",
+      "source": "吃青团.webm",
+      "git_blob": "00031236d476501f71b3f03f978a4b79952e5097",
+      "sha256": "0d99393dd64ddf0b1ec4ab4cf392c86092ab5edf58d12f5b72e325035da23606",
+      "bytes": 377524
+    },
+    "food_laba": {
+      "file": "food_laba.webm",
+      "source": "吃腊八粥.webm",
+      "git_blob": "c20156c0de0863832d7bc10fb65153559de388be",
+      "sha256": "f821527812875262cc0dda50fe023c603fc89ec566172777c6bff4fa45943011",
+      "bytes": 460665
+    },
+    "food_chongyang": {
+      "file": "food_chongyang.webm",
+      "source": "吃重阳糕.webm",
+      "git_blob": "cc54c1f82bb5c4b8e366fba6433b6534bedcf4fc",
+      "sha256": "d2b6b466fcb1ee689ae130680bf38311e9988d995879ca3b5b1d9aa0b5438058",
+      "bytes": 468951
+    },
+    "food_tangyuan": {
+      "file": "food_tangyuan.webm",
+      "source": "吃汤圆.webm",
+      "git_blob": "eac65950006cf0814e6e4f1ebe1c73b9e36a8791",
+      "sha256": "53a0f93612bb59c7279010f993a1101b033fc01df1998dd9874d8aea175afa6f",
+      "bytes": 437152
+    },
+    "food_dumplings": {
+      "file": "food_dumplings.webm",
+      "source": "吃饺子.webm",
+      "git_blob": "2dee24954bae172a20ef1e0d44b34d7105872851",
+      "sha256": "a607391c206cb2a1a977d72f318a6b5bfe95aee4da9b11c9de8724bd9981cc06",
+      "bytes": 554828
+    },
+    "toy_cube": {
+      "file": "toy_cube.webm",
+      "source": "原地专心玩魔方.webm",
+      "git_blob": "d2730f4c17e8ccb793973929c237b4fb32d8e3fc",
+      "sha256": "ad54da175ba86b19a84b73b3169fb418b2df016560bb274283f200aca351e712",
+      "bytes": 442948
+    },
+    "toy_toy_car": {
+      "file": "toy_toy_car.webm",
+      "source": "原地蹲下玩玩具汽车.webm",
+      "git_blob": "9a4ba01b33e6fba841a99ebf55631433651cdcd3",
+      "sha256": "3ec9978ce3663d9bc4bfe5f5223f0a4e3d9ea6fcd0a6acdbaa802e0cfba36bf2",
+      "bytes": 505114
+    },
+    "toy_balloon": {
+      "file": "toy_balloon.webm",
+      "source": "吹气球.webm",
+      "git_blob": "3a632cd91c409ed1b889f0313ae1394113c0d7c0",
+      "sha256": "3258f91b2000d949ba38f34c1f161b0d5fa148ecffb5a95eb8a3e10b5df7fc87",
+      "bytes": 751040
+    },
+    "toy_kite": {
+      "file": "toy_kite.webm",
+      "source": "放风筝.webm",
+      "git_blob": "000eba2f49a11beb21aa63ddc64c4d1522afa27e",
+      "sha256": "9d9ac75871b1c70a77fc4aaa63dd24778d79cbf492c2c5df42167199c7dd2132",
+      "bytes": 770134
+    },
+    "toy_spinning_top": {
+      "file": "toy_spinning_top.webm",
+      "source": "抽陀螺.webm",
+      "git_blob": "1a0cd6a9447c3a36b068fb9db46fd56447520a73",
+      "sha256": "693689d7b4d02ae8cda53f8d580de5087287fc339360dd20909342f566e969ba",
+      "bytes": 521068
+    },
+    "toy_swing": {
+      "file": "toy_swing.webm",
+      "source": "荡秋千.webm",
+      "git_blob": "41c61429405139344b13875135468edb25b6f28e",
+      "sha256": "f32ea98e9c04553ae39939cd76c469192ebc19d98b90ebf93ec4b88bf95b25c9",
+      "bytes": 644126
+    },
+    "toy_rocking_horse": {
+      "file": "toy_rocking_horse.webm",
+      "source": "骑木马.webm",
+      "git_blob": "b578f4c951a11c3fe97bdbd609315d3e72fe6827",
+      "sha256": "5f54a98ccac97eac000d799043411f4fc0732096dc51a2ad766552737578f313",
+      "bytes": 697580
+    }
+  },
+  "license": "Non-commercial assets; see ASSET-NOTICE.md",
+  "code_license": "MIT",
+  "asset_notice": "ASSET-NOTICE.md"
+}

@@ -1,0 +1,209 @@
+{
+  "repository": "https://github.com/PC2005-cloud/dsh-pet",
+  "license": "Non-commercial assets; see ASSET-NOTICE.md",
+  "reference_plugin": "https://github.com/youxin484/dsh-dafeiyu-enhanced",
+  "reference_commit": "e4006c754b40570ddaa8bb5d2d1ed16cdd2e8af2",
+  "clips": {
+    "scout": {
+      "file": "scout.webm",
+      "source": "工作状态-原地踱步张望.webm",
+      "sha256": "a56c17ef901fa531324a46a04def2381f65922d319ec83dadde34d2a4669e411",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 471725
+    },
+    "busy": {
+      "file": "busy.webm",
+      "source": "工作状态-忙碌点按.webm",
+      "sha256": "b5d702e0c04adb7b255ac702001c24da36c8bf95efc891f693f4976986ab2435",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 475613
+    },
+    "sort": {
+      "file": "sort.webm",
+      "source": "工作状态-清点归档.webm",
+      "sha256": "8c84f58f3a9e7b912e1cbfd89f77eb3652053fc9b2844295c8440cb636305d3b",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 362510
+    },
+    "sigh": {
+      "file": "sigh.webm",
+      "source": "工作状态-垂头叹气冒汗.webm",
+      "sha256": "ab00c844e62221905574b4c070e0d7b6fa14fb2afa1064c27a160f10e25f7196",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 198937
+    },
+    "giggle": {
+      "file": "giggle.webm",
+      "source": "点击回应-挠痒咯咯笑.webm",
+      "sha256": "f228279219f4084323ca1bfef1604f7c77bb3f505d45a8d1747b5ac3f9f2393b",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 425393
+    },
+    "bubbles": {
+      "file": "bubbles.webm",
+      "source": "鲸鱼吐泡泡特效.webm",
+      "sha256": "d64d02059dc1602f7de5aa3135d381351363f021b2bceed47655db322cc71db3",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 452096
+    },
+    "token": {
+      "file": "token.webm",
+      "source": "吃Token.webm",
+      "sha256": "d46ef798fb189cd7652f63d03a35e6f314e5a598b4a65f76202ec95852eb719c",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 574754
+    },
+    "stretch": {
+      "file": "stretch.webm",
+      "source": "超大伸懒腰.webm",
+      "sha256": "0ac66d918cc5efd49be1273c3830de73eae5f9bdcd5fcb968d1b2f9b487705ad",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 396987
+    },
+    "yawn": {
+      "file": "yawn.webm",
+      "source": "哈欠连天.webm",
+      "sha256": "2b23372e1ff2bc2f9078c09740708c960d4ea021f9fc3cca294d9df11e393ec8",
+      "commit": "549fff2ea33c2acfb16612c76912c6137da4a758",
+      "bytes": 424352
+    },
+    "flute": {
+      "file": "flute.webm",
+      "source": "吹笛子.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "fd57f820116b72c35e7b50ee3cdb5c20e775062b",
+      "sha256": "9c8b754a3256778cddd88fbb073b649d5b1d2e5f96e70231bc2c3bee06fa7c78",
+      "bytes": 768350
+    },
+    "violin": {
+      "file": "violin.webm",
+      "source": "小提琴演奏.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "2de1533cd0f2d7a72e0099f9ac6f816353f3912f",
+      "sha256": "03816be0fcd499b63ed667e8b87c234094e64c59f1cd222455cf6a27ac832d1c",
+      "bytes": 605350
+    },
+    "sway_dance": {
+      "file": "sway_dance.webm",
+      "source": "轻快摇摆舞.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "596558b14cacee0d96f5e9d3942fd5731be49718",
+      "sha256": "c621d00e1b959b991df8fc420e409b569e768fad7f75d1fb489375d101fee630",
+      "bytes": 542928
+    },
+    "cute_dance": {
+      "file": "cute_dance.webm",
+      "source": "可爱宅舞.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "0b96ac0de6fa7afe72f256148dd719698769043c",
+      "sha256": "4f737e44ea67c20368bdce474b951902c87c37991fb0750da8ed7794df6ec55c",
+      "bytes": 576307
+    },
+    "grace_dance": {
+      "file": "grace_dance.webm",
+      "source": "优雅女仆舞.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "390c504dfb0b56bb647f0253782a91ee705f8933",
+      "sha256": "74209c4c668545ab1e2366e0d1c0709b7bea0312eeba7e89b553d5b977bfe649",
+      "bytes": 578915
+    },
+    "dove_magic": {
+      "file": "dove_magic.webm",
+      "source": "变鸽子.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "150abd9011b3c9fec7229fa2b30418958040a7ad",
+      "sha256": "796eba8ebe705e9339035e533e4f913fb8b9810432dcd6e7ae4fc1602e9ce3cf",
+      "bytes": 509462
+    },
+    "card_magic": {
+      "file": "card_magic.webm",
+      "source": "扑克魔术.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "2e33efead726dff587fa0ca46adef5ecb5d0b7c9",
+      "sha256": "1d44a7624fb027e5f615c747014ab040ddc497f6bdbcb67194a23a53a5dba78c",
+      "bytes": 461997
+    },
+    "flower_magic": {
+      "file": "flower_magic.webm",
+      "source": "凭空生花.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "085fe6d74ddfc268670be32b7c3f78c6806b68f1",
+      "sha256": "d1c336bc54c57a282bec180859c7b7b58912b70b5bca7b2f49495cd30cc7d5d6",
+      "bytes": 620252
+    },
+    "juggle": {
+      "file": "juggle.webm",
+      "source": "三球抛接.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "a76228cb5f42fa159e3ec565b8ef969a7d289dca",
+      "sha256": "a64c08a4b7e5c3549616faf9dcd418e17f156b4b72d906646e4d57067df70d23",
+      "bytes": 549316
+    },
+    "shuttlecock": {
+      "file": "shuttlecock.webm",
+      "source": "踢毽子.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "1a0586564e58e6a60e4f151d2bf161e975673e30",
+      "sha256": "68937b619a44e9ca7ccdfe77e5657f7a9bfa238beb33768378b6f254a16f3dbd",
+      "bytes": 531015
+    },
+    "gomoku": {
+      "file": "gomoku.webm",
+      "source": "下五子棋.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "63295b32e6a0522dac3840abb74a5af7b1431a08",
+      "sha256": "0802b6b808f44846b3d194a857fb0ffd38bdea2d7cdb91c9e5e6f311e44f1953",
+      "bytes": 514704
+    },
+    "pet_cat": {
+      "file": "pet_cat.webm",
+      "source": "撸猫.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "466044675ea20b863db850373aab8a6c2b7c11a8",
+      "sha256": "068d84e944dfce17de1c5a2ee2a4bc391e2848dad88a7df4877ebf23cf38bcec",
+      "bytes": 348432
+    },
+    "animals": {
+      "file": "animals.webm",
+      "source": "动物环绕.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "44722e0afb7ef4c1cd85c5c98eadd9b4ade2fea9",
+      "sha256": "814d41e7d619f9a61f38e5494a0cfd703f8bcfd829a14fa921e1c59acf3ce872",
+      "bytes": 981435
+    },
+    "garden": {
+      "file": "garden.webm",
+      "source": "蝴蝶蜜蜂环绕头顶开花.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "6f39bb90fd8349d5f23d0912a4bc01c2c06470f2",
+      "sha256": "fd286c78001fe57fc093c06a4b79ef077ade2dacd2a77e011d3f393f587707ec",
+      "bytes": 852828
+    },
+    "whale": {
+      "file": "whale.webm",
+      "source": "蓝鲸现世.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "eb62a155d056d35a16b1d4e961d5ff10c109f684",
+      "sha256": "ed72f0ede7c6cd9482d44aa31002214d461b833c456f3ea40a52c3a0ddc20230",
+      "bytes": 482896
+    },
+    "gift": {
+      "file": "gift.webm",
+      "source": "拆礼物.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "01445f708db3e19b707e6d1609902dd4da9c0ade",
+      "sha256": "6f781e7eac2b295417c80ff9468902280fdcf3ae5921d59977daa8dab537940c",
+      "bytes": 517803
+    },
+    "jump_catch": {
+      "file": "jump_catch.webm",
+      "source": "原地跳跃抓碎头顶物品.webm",
+      "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+      "git_blob": "b45cdcb57340f12fff1b40ea9391bdd1d3c2845a",
+      "sha256": "ccb906c677c7b739eb0dbf5307160e66583562c2a6caec72a9d3d14a202fcccd",
+      "bytes": 619282
+    }
+  },
+  "code_license": "MIT",
+  "asset_notice": "ASSET-NOTICE.md"
+}

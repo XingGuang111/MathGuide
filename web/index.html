@@ -3,39 +3,114 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MathGuide 小学数学启发式辅导</title>
+  <title>MathGuide · 数学探险小天地</title>
+  <link rel="stylesheet" href="/pet.css">
+  <link rel="stylesheet" href="/assets/learning.css">
   <style>
     :root{font-family:"Microsoft YaHei",system-ui,sans-serif;color:#233044;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}.shell{max-width:1120px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.brand h1{margin:0;color:#2365d3}.brand p{margin:6px 0 0;color:#667085}.health{padding:8px 12px;border-radius:99px;background:#fff;box-shadow:0 2px 12px #19355d12}.grid{display:grid;grid-template-columns:1fr 310px;gap:18px}.panel{background:#fff;border-radius:18px;box-shadow:0 8px 28px #19355d12;overflow:hidden}.chat{height:62vh;min-height:440px;padding:22px;overflow:auto}.msg{max-width:82%;padding:12px 15px;border-radius:15px;margin:9px 0;white-space:pre-wrap;line-height:1.65}.teacher{background:#eef4ff}.student{background:#2365d3;color:#fff;margin-left:auto}.composer{border-top:1px solid #e8edf5;padding:14px;display:flex;gap:10px}textarea{flex:1;resize:none;border:1px solid #ccd5e3;border-radius:12px;padding:12px;font:inherit}button,.upload{border:0;border-radius:11px;padding:11px 16px;background:#2365d3;color:#fff;font:inherit;cursor:pointer}.secondary{background:#e9eef7;color:#334155}.side{padding:20px}.card{background:#f7f9fc;border-radius:14px;padding:15px;margin-bottom:14px}.card h3{margin:0 0 10px;color:#2365d3}.card p{margin:7px 0;line-height:1.55}.muted{color:#778397}.upload{display:inline-block;background:#12a594}.hidden{display:none}.stats{padding:0;margin:0;list-style:none}.stats li{padding:8px 0;border-bottom:1px solid #edf0f5}#alert-banner{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-8px);background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:10px;padding:10px 18px;box-shadow:0 6px 20px #19355d22;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;font-size:14px}#alert-banner.show{opacity:1;transform:translateX(-50%) translateY(0)}.grade{color:#07875d;font-weight:600}.temp-badge{display:inline-block;background:#fef3c7;color:#92400e;border-radius:6px;padding:2px 8px;font-size:12px;margin-bottom:4px}@media(max-width:800px){.grid{grid-template-columns:1fr}.chat{height:55vh}.top{align-items:flex-start;gap:12px}.health{font-size:12px}}
   </style>
+  <link rel="stylesheet" href="/assets/playful.css">
+  <link rel="stylesheet" href="/assets/homework.css">
 </head>
 <body>
 <main class="shell">
   <div id="alert-banner" role="status" aria-live="polite"></div>
-  <header class="top"><div class="brand"><h1>MathGuide</h1><p>不直接给答案，陪你一步一步想明白</p></div><div id="health" class="health">正在检查模型…</div></header>
-  <div class="grid">
-    <section class="panel">
-      <div id="chat" class="chat"><div class="msg teacher">你好！把小学数学题发给我，或者上传题目照片吧。</div></div>
+  <header class="top"><div class="brand"><span class="brand-icon" aria-hidden="true">✦</span><div><h1>MathGuide<span class="brand-label">数学小天地</span></h1><p>和星芽一起，把小问号变成小星星！</p></div></div><div id="health" class="health" role="status">正在检查模型…</div></header>
+  <nav class="workspace-nav" aria-label="学习空间"><button id="tutor-tab" class="workspace-tab is-active" aria-pressed="true"><span aria-hidden="true">✎</span> 题目辅导</button><button id="learning-tab" class="workspace-tab" aria-pressed="false"><span aria-hidden="true">⚑</span> 学习档案 <span class="nav-dot"></span></button><button id="shop-tab" class="workspace-tab" aria-pressed="false"><span aria-hidden="true">♧</span> 商店</button><span class="workspace-caption">✧ 每一次思考，都算数。</span></nav>
+  <div class="pet-entertainment-entry"><button id="pet-entertainment-open" type="button" class="secondary">🎈 娱乐模式</button></div>
+  <div id="learning-demo-notice" class="learning-demo-notice" hidden><span class="demo-dot"></span><strong>演示档案</strong><span>以下为虚构学习轨迹，用于展示薄弱点分析与学习记录。</span></div>
+  <section id="learning-view" class="learning-view" aria-label="学习档案" hidden>
+    <div class="learning-hero"><div><p class="learning-eyebrow">★ 我的小小成长地图</p><h2>把不懂的，慢慢变成会的<span>。</span></h2><p class="learning-hero-copy">每一道认真想过的题，都是探险路上的小脚印。</p><div id="learning-range" class="learning-range">正在整理你的学习足迹…</div></div><div class="learning-highlight"><span class="highlight-mark" aria-hidden="true">✦</span><p>每一小步，都在向前</p><strong id="learning-highlight-text">慢慢想，也是一种进步。</strong><span id="learning-highlight-note">让我们从一道题开始。</span></div></div>
+    <p id="learning-load-status" class="learning-load-status" role="status"></p>
+    <div id="learning-metrics" class="learning-metrics"></div>
+    <section class="learning-section" id="learning-weakness-section"><div class="learning-section-head"><div><p class="section-kicker">✦ 让小问号变少一点</p><h3>下一步，练什么？</h3><p>从需要多想一想，到可以自己做出来。</p></div><button id="learning-practice" class="learning-primary">开始推荐练习 <span aria-hidden="true">↗</span></button></div><div id="learning-weaknesses" class="learning-weaknesses"></div><p class="learning-footnote">连续独立答对 3 题记为“初步巩固”，是复习参考，不代表长期掌握。</p></section>
+    <section class="learning-section learning-activity"><div class="learning-section-head"><div><p class="section-kicker">⚑ 一天一点点</p><h3>最近 7 天的学习足迹</h3><p>记录认真想过的题，也记录还需要帮助的时刻。</p></div><div class="activity-legend"><span><i></i>独立解出</span><span><i class="review"></i>讲解后复习</span></div></div><div id="learning-activity-chart" class="learning-activity-chart"></div></section>
+    <section class="learning-section" id="learning-records-section"><div class="learning-section-head"><div><p class="section-kicker">✎ 我的解题故事</p><h3>学习记录<span id="learning-record-count" class="heading-count">0</span></h3><p>答案之外，你的思考过程也值得被看见。</p></div><label class="learning-search"><span aria-hidden="true">⌕</span><input id="learning-search" type="search" aria-label="搜索学习记录" placeholder="搜索题目或知识点"></label></div><div class="learning-record-toolbar"><div id="learning-record-tabs" class="record-tabs" aria-label="记录状态筛选"><button type="button" data-record-state="all" class="is-active" aria-pressed="true">全部记录</button><button type="button" data-record-state="review" aria-pressed="false">需要复习</button><button type="button" data-record-state="solved" aria-pressed="false">独立解出</button></div><button id="learning-refresh" class="learning-text-button">↻ 刷新记录</button></div><div id="learning-record-list" class="learning-record-list"></div><button id="learning-more" class="learning-more" hidden>展开更多学习记录 ↓</button></section>
+  </section>
+  <section id="homework-view" class="hw-view" aria-label="每日作业" hidden></section>
+  <div id="tutor-workspace" class="grid">
+    <section class="adventure-hero" aria-labelledby="adventure-title">
+      <div class="adventure-copy"><span class="adventure-label">✦ 欢迎来到数学小天地</span><h2 id="adventure-title">小小脑袋，<br>装着<span>大大奇思妙想！</span></h2><p>带上一道题，和星芽一起出发。<br>读一读、想一想，你也能发现答案的秘密。</p><div class="adventure-stickers" aria-label="学习方式"><span>✎ 大胆想</span><span>♡ 慢慢来</span><span>★ 一起进步</span></div></div>
+      <img class="adventure-art" src="/assets/math-adventure.svg" alt="微笑的星星伙伴坐在数学书上，身旁是铅笔、数字和小云朵" width="440" height="290">
+    </section>
+    <section class="panel tutor-panel" aria-labelledby="tutor-title">
+      <div class="tutor-heading"><div class="tutor-heading-icon" aria-hidden="true">✎</div><div><h2 id="tutor-title">今天，一起解开什么小问号？</h2><p>不用着急，老师陪你一步一步想。</p></div><span class="tutor-heading-star" aria-hidden="true">✧</span></div>
+      <div class="thinking-trail" aria-label="解题三步走"><span><b>1</b> 读懂题目</span><i aria-hidden="true">···</i><span><b>2</b> 找到方法</span><i aria-hidden="true">···</i><span><b>3</b> 动手算算</span></div>
+      <div id="chat" class="chat" role="log" aria-label="数学辅导对话" aria-live="polite"><div class="welcome-note"><span aria-hidden="true">✦</span><p>每个“为什么”，<br>都是一次新发现。</p><small>准备好了吗？我们开始吧！</small></div><div class="msg teacher">你好呀，小小探险家！把数学题发给我，或者选一张题目照片，我们一起想办法吧。</div></div>
       <div class="composer">
-        <textarea id="input" rows="2" maxlength="2000" aria-label="题目或回答" placeholder="输入题目或你的解题思路…"></textarea>
-        <button id="send">发送</button>
+        <textarea id="input" rows="2" maxlength="2000" aria-label="题目或回答" placeholder="把题目或你的想法写在这里吧…"></textarea>
+        <button id="send">发送 ✦</button>
+      </div>
+      <p class="composer-tip">小提示：按 Enter 发送，Shift + Enter 换行</p>
+    </section>
+    <aside class="side" aria-label="解题小帮手">
+      <div id="formula" class="card"><h3>知识卡片</h3><p class="muted">藏着解题小窍门！发来题目，就能发现对应的公式和提醒。</p></div>
+      <section id="thinking-notes" class="card thinking-notes" aria-labelledby="thinking-notes-title"><div class="notes-head"><h3 id="thinking-notes-title">✎ 解题小笔记</h3><span class="notes-live">随对话更新</span></div><div id="thinking-notes-content" role="status" aria-live="polite"><p class="notes-empty">发来一道题，我会在这里记下条件、目标和已经确认的思路。</p></div></section>
+
+
+    </aside>
+    <section class="tutor-followup" aria-label="学习回顾与小工具">
+      <div class="followup-head"><div><span class="section-kicker">✦ 学完之后，再走一小步</span><h2>把今天的发现，变成自己的本领。</h2></div><div class="study-actions"><button id="new" class="secondary">✎ 换一道题</button><button id="history" class="secondary">⚑ 学习记录</button><button id="practice" class="secondary">✦ 再练一练</button></div></div>
+      <div class="tutor-extras">
+      <div class="card photo-card"><h3><span aria-hidden="true">▧</span> 拍张题目，一起想</h3><p class="muted">不用一个字一个字打，选张清楚的题目照片就好。</p><label class="upload" role="button" tabindex="0" aria-controls="photo">＋ 选择题目照片<input id="photo" class="hidden" type="file" accept="image/png,image/jpeg,image/bmp"></label><p class="photo-tip">识别后检查一下，再发给老师哦</p></div>
+        <div class="card compact-learning-card"><div class="compact-learning-head"><h3>值得再练一练</h3><button id="weakness-link" class="learning-text-button">查看档案 ↗</button></div><ul id="stats" class="stats"><li class="muted">暂无学习记录</li></ul></div>
+        <div id="qrcode-card" class="card hidden"><img id="qrcode-img" alt="局域网访问二维码" width="104" height="104"><div class="qrcode-copy"><h3>📱 换到手机，继续想</h3><p class="muted">用同一 Wi-Fi 的手机扫码打开。</p><p id="qrcode-url" class="muted"></p></div></div>
       </div>
     </section>
-    <aside class="panel side">
-      <div class="card"><h3>拍照搜题</h3><p class="muted">识别后可先修改题目，再开始辅导。</p><label class="upload">选择图片<input id="photo" class="hidden" type="file" accept="image/png,image/jpeg,image/bmp"></label></div>
-      <div id="formula" class="card"><h3>知识卡片</h3><p class="muted">开始题目后显示对应公式与易错提示。</p></div>
-      <div class="card"><h3>薄弱点</h3><ul id="stats" class="stats"><li class="muted">暂无学习记录</li></ul></div>
-      <button id="new" class="secondary">换一道题</button>
-      <button id="history" class="secondary">学习记录</button>
-      <button id="practice" class="secondary" style="margin-top:10px">薄弱点专项练习</button>
-    </aside>
   </div>
+  <section id="pet-store-view" class="pet-store-view" aria-labelledby="pet-store-title" hidden>
+    <header class="store-hero"><div><span class="adventure-label">✦ 星芽的快乐补给站</span><h2 id="pet-store-title">认真学习，攒一点小惊喜。</h2><p>用学习获得的星星，给伙伴选点好吃的、好玩的，或换个新造型。</p></div><span class="store-hero-art" aria-hidden="true">♧</span></header>
+    <div class="pet-store-layout"><aside class="pet-profile-column">
+      <section id="pet-card" class="card pet-card" data-level="1" aria-label="星芽伙伴档案">
+        <div class="pet-head"><div><h3>我的伙伴 · 星芽</h3><div id="pet-stage" class="pet-stage">正在唤醒…</div></div><strong id="pet-coins">⭐ 0</strong><button id="pet-collapse" class="pet-small-button" aria-expanded="true">隐藏星芽</button></div>
+        <div class="pet-avatar-source">
+          <button id="pet-avatar" class="pet-avatar" type="button" aria-label="点击或拖动星芽"><video id="pet-video" class="pet-video" muted playsinline preload="metadata"></video><img id="pet-fallback" class="pet-fallback" src="/assets/pet/fallback.svg" alt="星芽暂时离线" hidden><span class="pet-emotion-effects" aria-hidden="true"><i></i><i></i></span><span class="pet-hat-layer"><img id="pet-hat" class="pet-hat" alt="" hidden></span><span id="pet-crown" class="pet-crown" hidden>★</span><img id="pet-prop" class="pet-prop" alt="" hidden><span id="pet-message" class="pet-toast pet-bubble" role="status">我会陪你学习，也可以和我说说话。</span></button>
+        </div>
+        <div id="pet-emotion" class="pet-emotion" role="status">微笑陪伴</div>
+        <section class="pet-energy-panel" aria-label="当日活力与玩耍时间">
+          <strong id="pet-energy-value">今日活力 0 / 40</strong>
+          <p id="pet-energy-status" role="status">完成学习小任务，获得玩耍活力。</p>
+          <button id="pet-energy-start" type="button" disabled>20 活力 · 玩 2 分钟</button>
+          <button id="pet-energy-study" class="pet-small-button" type="button">去完成学习小任务</button>
+          <details><summary>活力怎么获得？</summary><p>完成一道题最多获得 20 活力；已核实的小步骤每步 5 活力，计入同一题的奖励。活力最多存 40，当天重开保留，次日重置。食物和星星不恢复活力。学习对话与安静陪伴一直可用。</p><p id="pet-energy-quota"></p></details>
+        </section>
+        <div id="pet-details">
+          <div class="pet-status-row"><span id="pet-mood">心情 --/100</span><span id="pet-xp-text">成长值 0</span></div>
+          <div id="pet-progress" class="pet-xp" role="progressbar" aria-label="学习伙伴成长进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="pet-xp-bar" style="width:0%"></i></div>
+          <div id="pet-timeline" class="pet-timeline"></div><div id="pet-inventory" class="pet-inventory"></div>
+          <div class="pet-actions"><button id="pet-shop">🛍️ 商店</button><button id="pet-feed" class="secondary">🍪 喂食</button><button id="pet-play" class="secondary">🎈 玩耍</button></div>
+          <div class="pet-collection-links"><button id="pet-lessons" class="pet-small-button">✨ 学动作 <span id="pet-action-count">0/26</span></button><button id="pet-wardrobe" class="pet-small-button">🎀 帽子装扮</button></div>
+          <div class="pet-bottom"><button id="pet-touch" class="pet-small-button">摸摸回应</button><button id="pet-home" class="pet-small-button" hidden>重置位置</button><button id="pet-retry" class="pet-small-button">刷新档案</button></div>
+          <div class="pet-chat-header"><button id="pet-chat-toggle" class="pet-small-button" aria-expanded="false" aria-controls="pet-chat-panel">💬 和星芽说话</button><button id="pet-study" class="pet-small-button" hidden>先做一道题</button></div>
+          <div id="pet-chat-panel" class="pet-chat-panel" hidden>
+            <p class="pet-chat-intro">告诉我你的想法，我会陪你一步一步学。</p>
+            <div id="pet-chat-log" class="pet-chat-log" role="log" aria-label="与星芽的对话" aria-live="polite"></div>
+            <div class="pet-chat-suggestions"><button type="button" data-pet-say="这题好难，我有点没信心。">这题好难</button><button type="button" data-pet-say="我有点不想学习了。">不想学了</button><button type="button" data-pet-say="给我加加油吧！">给我加油</button><button type="button" data-pet-say="给我笑一笑吧！">笑一笑</button></div>
+            <form id="pet-chat-form" class="pet-chat-form"><input id="pet-chat-input" maxlength="800" autocomplete="off" aria-label="和星芽说句话" placeholder="和星芽说句话…" required><button id="pet-chat-send" type="submit">发送</button></form>
+            <p id="pet-chat-status" class="pet-chat-status" role="status"></p>
+          </div>
+        </div>
+      </section>
+      <p class="store-companion-note">星芽会在页面角落陪你。<br>可以拖动它，也可以点菜单和它互动。</p></aside>
+<section id="pet-dialog" class="pet-store-catalog" aria-labelledby="shop-catalog-title">
+  <div class="pet-dialog-head"><h2 id="shop-catalog-title">给伙伴挑一份小惊喜</h2><strong id="shop-balance">我的星星 0 ⭐</strong></div>
+  <div class="pet-shop-tabs" role="tablist" aria-label="星芽商店分类"><button id="pet-tab-items" role="tab" aria-selected="true" aria-controls="shop-items-panel" tabindex="0">食物玩具</button><button id="pet-tab-actions" role="tab" aria-selected="false" aria-controls="shop-actions-panel" tabindex="-1">学动作</button><button id="pet-tab-hats" role="tab" aria-selected="false" aria-controls="shop-hats-panel" tabindex="-1">帽子装扮</button></div>
+  <section id="shop-items-panel" role="tabpanel" aria-labelledby="pet-tab-items"><p class="pet-dialog-note muted">挑一份好吃的，或一件喜欢的玩具。食物喂一次消耗一份，玩具可以反复玩；带“专属动作”的物品会播放对应互动动画。</p><div class="pet-item-filters" role="group" aria-label="筛选商品"><button type="button" data-item-filter="all" aria-pressed="true">全部</button><button type="button" data-item-filter="food" aria-pressed="false">日常食物</button><button type="button" data-item-filter="festival" aria-pressed="false">节日美食</button><button type="button" data-item-filter="toy" aria-pressed="false">玩具</button><button type="button" data-item-filter="owned" aria-pressed="false">我的背包</button></div><div id="shop-grid" class="shop-grid shop-categories"></div></section>
+  <section id="shop-actions-panel" role="tabpanel" aria-labelledby="pet-tab-actions" hidden><p class="pet-dialog-note muted">花星星学习一次，永久学会。开启玩耍时间后可以自由表演，不再花星星。</p><div id="pet-lessons-grid" class="shop-grid"></div></section>
+  <section id="shop-hats-panel" role="tabpanel" aria-labelledby="pet-tab-hats" hidden><p class="pet-dialog-note muted">喜欢的帽子买一次就拥有，随时戴上或摘下。不会消耗成长值。</p><div id="pet-hats-grid" class="shop-grid"></div></section>
+  <p id="shop-status" role="status" style="min-height:22px"></p><button id="pet-dialog-close" class="secondary">✎ 回去做一道题</button>
+</section>
+    </div>
+  </section>
 </main>
+<footer class="page-footer">✦ 好奇心准备好，数学探险就出发。<span>每一次尝试，都值得一颗小星星。</span></footer>
 
-<dialog id="records" style="width:min(850px,95vw);max-height:85vh;border:0;border-radius:16px;padding:24px">
-<h2>学习记录</h2><form id="filters"><label>日期 <input id="record-date" type="date"></label> <label>题型 <select id="record-type"><option value="">全部题型</option><option>计算题</option><option>几何应用题</option><option>行程应用题</option><option>百分数应用题</option><option>单位换算题</option><option>平均数应用题</option></select></label> <button>查询</button> <button type="button" id="close-records" class="secondary">关闭</button></form><p id="record-status" role="status"></p><div id="record-list"></div><div id="record-detail"></div>
+<dialog id="records" class="learning-record-dialog" aria-labelledby="records-title">
+<div class="record-dialog-head"><div><p class="section-kicker">✦ 看看当时的好想法</p><h2 id="records-title">回看一次思考</h2></div><button type="button" id="close-records" class="record-close" aria-label="关闭学习记录">✕</button></div><form id="filters" class="record-dialog-filters"><label>日期 <input id="record-date" type="date"></label><label>题型 <select id="record-type"><option value="">全部题型</option><option>计算题</option><option>几何应用题</option><option>行程应用题</option><option>百分数应用题</option><option>单位换算题</option><option>平均数应用题</option></select></label><button class="learning-primary">筛选记录</button></form><p id="record-status" role="status"></p><div class="record-dialog-body"><div id="record-list" class="record-dialog-list"></div><div id="record-detail" class="record-dialog-detail"></div></div>
 </dialog>
 <dialog id="practice-dialog" style="width:min(720px,95vw);max-height:85vh;border:0;border-radius:16px;padding:24px">
   <h2>薄弱点专项练习</h2>
+  <div id="practice-pet-reaction" class="practice-pet-reaction" role="status"><div class="practice-pet-portrait"><video id="practice-pet-video" muted playsinline loop preload="none" poster="/assets/pet/fallback.svg" aria-hidden="true"></video><span class="pet-emotion-effects" aria-hidden="true"><i></i><i></i></span><span class="pet-hat-layer"><img id="practice-pet-hat" class="pet-hat" alt="" hidden></span></div><div><strong id="practice-pet-emotion">星芽陪你思考</strong><p id="practice-pet-message">一步一步来，我陪着你。</p></div></div>
   <p class="muted">自动优先安排需要复习的知识点。连续独立答对3题标为初步巩固，仅供复习参考。</p>
   <h3 id="practice-topic"></h3><p id="practice-question" style="font-size:20px;line-height:1.7"></p>
   <form id="practice-form"><label>你的答案 <input id="practice-answer" maxlength="100" autocomplete="off" required placeholder="填写数值或分数"></label> <span id="practice-unit"></span> <button id="practice-submit">提交答案</button></form>
@@ -44,6 +119,17 @@
   <button id="practice-next">下一道改编题</button>
   <button id="practice-close" class="secondary">关闭</button>
 </dialog>
-<script src="/app.js"></script>
+
+<dialog id="pet-entertainment-dialog" class="pet-entertainment-dialog" aria-labelledby="pet-entertainment-title">
+  <form id="pet-entertainment-form">
+    <h2 id="pet-entertainment-title">进入娱乐模式</h2>
+    <p>所有食物、玩具、动作和帽子都已准备好，可以自由体验。</p>
+    <label for="pet-entertainment-password">请输入密码</label>
+    <input id="pet-entertainment-password" type="password" maxlength="80" autocomplete="off" required>
+    <p id="pet-entertainment-error" role="alert"></p>
+    <div><button id="pet-entertainment-cancel" type="button" class="secondary">取消</button><button id="pet-entertainment-submit" type="submit">进入娱乐模式</button></div>
+  </form>
+</dialog>
+<script src="/assets/workspace.js"></script><script src="/pet.js"></script><script src="/assets/learning.js"></script><script src="/app.js"></script><script src="/assets/homework.js"></script>
 </body>
 </html>

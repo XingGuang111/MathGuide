@@ -7,12 +7,17 @@ __pycache__/
 # pytest 缓存
 .pytest_cache/
 
+# Python 虚拟环境
+.venv/
+venv/
+
 # 编辑器 / IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+~$*
 
 # 运行时数据
 data/mathguide.db
@@ -24,6 +29,12 @@ data/*.sessions.tmp
 # PPT 构建临时目录（最终版 PPT 文件保留在仓库中）
 .pptx-build/
 .pptx-unpack/
+.codex-ppt/
+
+# 本地测试、演示和生成产物（可能包含学习数据）
+output/
+tmp/
+node_modules/
 
 # Claude Code 本地配置
 .claude/
@@ -32,3 +43,5 @@ data/*.sessions.tmp
 *.tmp
 *.bak
 temp/
+.reference/
+.pet-qa/

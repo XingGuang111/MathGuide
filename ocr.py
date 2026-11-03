@@ -41,3 +41,13 @@ def recognize(image_path):
 def _clean(lines):
     """合并识别行：去空白行、去首尾空白，用空格连接为单行题干"""
     return " ".join(line.strip() for line in lines if line and line.strip())
+
+
+def recognize_layout(image_path):
+    """Keep the engine's reading order, quadrilateral boxes and confidence for correction."""
+    try:
+        result, _ = _get_engine()(str(image_path))
+        return [dict(text=str(text).strip(), box=[[float(x), float(y)] for x, y in box],
+                     confidence=float(confidence)) for box, text, confidence in (result or []) if str(text).strip()]
+    except Exception as exc:
+        raise OCRError('图片识别失败，请重试或换一张更清晰的照片') from exc

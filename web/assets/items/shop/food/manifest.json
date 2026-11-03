@@ -1,0 +1,97 @@
+{
+  "rice": {
+    "animation": "food_rice",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "breakfast": {
+    "animation": "food_breakfast",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "lunch": {
+    "animation": "food_lunch",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "dinner": {
+    "animation": "food_dinner",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "icecream": {
+    "animation": "food_icecream",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "crab": {
+    "animation": "food_crab",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "tanghulu": {
+    "animation": "food_tanghulu",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "noodles": {
+    "animation": "food_noodles",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "watermelon": {
+    "animation": "food_watermelon",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "hotpot": {
+    "animation": "food_hotpot",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "token_snack": {
+    "animation": "token",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "mooncake": {
+    "animation": "food_mooncake",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "zongzi": {
+    "animation": "food_zongzi",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "niangao": {
+    "animation": "food_niangao",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "qingtuan": {
+    "animation": "food_qingtuan",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "laba": {
+    "animation": "food_laba",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "chongyang": {
+    "animation": "food_chongyang",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "tangyuan": {
+    "animation": "food_tangyuan",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  },
+  "dumplings": {
+    "animation": "food_dumplings",
+    "method": "visible-source-pixels-with-reviewed-food-mask",
+    "character_removed": true
+  }
+}

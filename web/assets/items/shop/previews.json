@@ -1,0 +1,132 @@
+{
+  "rice": {
+    "animation": "food_rice",
+    "time": 4.5,
+    "file": "rice.png"
+  },
+  "breakfast": {
+    "animation": "food_breakfast",
+    "time": 4.5,
+    "file": "breakfast.png"
+  },
+  "lunch": {
+    "animation": "food_lunch",
+    "time": 4.5,
+    "file": "lunch.png"
+  },
+  "dinner": {
+    "animation": "food_dinner",
+    "time": 4.5,
+    "file": "dinner.png"
+  },
+  "icecream": {
+    "animation": "food_icecream",
+    "time": 4.5,
+    "file": "icecream.png"
+  },
+  "crab": {
+    "animation": "food_crab",
+    "time": 4.5,
+    "file": "crab.png"
+  },
+  "tanghulu": {
+    "animation": "food_tanghulu",
+    "time": 4.5,
+    "file": "tanghulu.png"
+  },
+  "noodles": {
+    "animation": "food_noodles",
+    "time": 4.5,
+    "file": "noodles.png"
+  },
+  "watermelon": {
+    "animation": "food_watermelon",
+    "time": 4.5,
+    "file": "watermelon.png"
+  },
+  "hotpot": {
+    "animation": "food_hotpot",
+    "time": 4.5,
+    "file": "hotpot.png"
+  },
+  "token_snack": {
+    "animation": "token",
+    "time": 4.5,
+    "file": "token_snack.png"
+  },
+  "mooncake": {
+    "animation": "food_mooncake",
+    "time": 4.5,
+    "file": "mooncake.png"
+  },
+  "zongzi": {
+    "animation": "food_zongzi",
+    "time": 4.5,
+    "file": "zongzi.png"
+  },
+  "niangao": {
+    "animation": "food_niangao",
+    "time": 4.5,
+    "file": "niangao.png"
+  },
+  "qingtuan": {
+    "animation": "food_qingtuan",
+    "time": 4.5,
+    "file": "qingtuan.png"
+  },
+  "laba": {
+    "animation": "food_laba",
+    "time": 4.5,
+    "file": "laba.png"
+  },
+  "chongyang": {
+    "animation": "food_chongyang",
+    "time": 4.5,
+    "file": "chongyang.png"
+  },
+  "tangyuan": {
+    "animation": "food_tangyuan",
+    "time": 4.5,
+    "file": "tangyuan.png"
+  },
+  "dumplings": {
+    "animation": "food_dumplings",
+    "time": 4.5,
+    "file": "dumplings.png"
+  },
+  "cube": {
+    "animation": "toy_cube",
+    "time": 4.5,
+    "file": "cube.png"
+  },
+  "toy_car": {
+    "animation": "toy_toy_car",
+    "time": 4.5,
+    "file": "toy_car.png"
+  },
+  "balloon": {
+    "animation": "toy_balloon",
+    "time": 6.5,
+    "file": "balloon.png"
+  },
+  "kite": {
+    "animation": "toy_kite",
+    "time": 4.5,
+    "file": "kite.png"
+  },
+  "spinning_top": {
+    "animation": "toy_spinning_top",
+    "time": 4.5,
+    "file": "spinning_top.png"
+  },
+  "swing": {
+    "animation": "toy_swing",
+    "time": 4.5,
+    "file": "swing.png"
+  },
+  "rocking_horse": {
+    "animation": "toy_rocking_horse",
+    "time": 4.5,
+    "file": "rocking_horse.png"
+  }
+}

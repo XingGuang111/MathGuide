@@ -4,6 +4,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 import db
+import agent
 import web_app
 
 
@@ -27,14 +28,23 @@ def test_session_reply_and_archive(tmp_path, monkeypatch):
     client, path = _client(tmp_path, monkeypatch)
     analyzed = {"is_elementary_math": True, "knowledge_id": 12,
                 "question_type": "几何应用题", "raw_knowledge": None}
-    replies = iter(["先想一想面积公式是什么？[CONTINUE]", "答对了！[UNDERSTOOD]"])
     with patch("agent.llm.analyze", return_value=analyzed), \
-         patch("agent.llm.chat_stream", side_effect=lambda messages: iter([next(replies)])):
+         patch("agent.llm.chat_stream", side_effect=[
+             iter(["题意清楚了。[UNDERSTOOD]"]), iter(["方法正确。[UNDERSTOOD]"]),
+         ]):
         started = client.post("/api/sessions", json={"question": "长方形长12米宽8米，面积是多少？"})
         assert started.status_code == 200
         body = started.json()
         assert body["card"]["knowledge_point"] == "长方形面积"
         assert "CONTINUE" not in body["reply"]
+        assert '不明白' in body['reply']
+        for message, expected in [
+            ('明白了，要求长方形面积', agent.AgentState.STAGE2_METHOD),
+            ('长乘宽，因为要求长方形面积', agent.AgentState.STAGE3_COMPUTE),
+        ]:
+            response = client.post('/api/replies', json={'session_id': body['session_id'], 'message': message})
+            assert response.status_code == 200 and not response.json()['finished']
+            assert web_app._sessions[body['session_id']].state == expected
         answered = client.post("/api/replies", json={
             "session_id": body["session_id"], "message": "12乘8等于96平方米"
         })
@@ -57,6 +67,24 @@ def test_history_decodes_dialogue(tmp_path, monkeypatch):
     rows = client.get("/api/history").json()
     assert rows[0]["dialogue"][0]["content"] == "2"
     assert "dialogue_log" not in rows[0]
+
+
+def test_stats_links_known_topics_to_practice_without_guessing(tmp_path, monkeypatch):
+    client, path = _client(tmp_path, monkeypatch)
+    for name in ("长方形面积", "自定义知识点"):
+        db.save_record({"session_id": name, "record_date": "2026-10-29",
+                        "question_type": "几何应用题", "question_text": "回顾题目",
+                        "knowledge_point": name, "formula": "", "dialogue_log": "[]",
+                        "understood": 0}, path)
+    with db._conn(path) as connection:
+        connection.execute("INSERT INTO practice_exercise(id, knowledge_id, payload, correct) "
+                           "VALUES (?, ?, ?, ?)", ("practice-only", 8, "{}", 1))
+    rows = {row['knowledge_point']: row for row in client.get('/api/stats').json()}
+    assert rows['长方形面积']['knowledge_id'] == 12
+    assert rows['长方形面积']['not_understood'] == 1
+    assert rows['分数的加减法']['knowledge_id'] == 8
+    assert rows['分数的加减法']['practice_total'] == 1
+    assert rows['自定义知识点']['knowledge_id'] is None
 
 
 def test_sessions_returns_clarify_instead_of_error(tmp_path, monkeypatch):

@@ -23,7 +23,18 @@ def test_check_health_model_missing():
     with patch("llm.ollama") as mock_ollama:
         mock_ollama.list.return_value = {"models": [{"name": "other:7b"}]}
         tip = llm.check_health()
-        assert "ollama pull" in tip
+        assert "ollama pull qwen2.5:3b-instruct-q4_K_M" in tip
+        assert "ollama create mathguide-qwen25-3b -f models/Modelfile.qwen25-mathguide" in tip
+        assert "ollama pull mathguide-qwen25-3b" not in tip
+
+
+def test_check_health_alternative_model_missing(monkeypatch):
+    monkeypatch.setattr(config, "MODEL_NAME", "qwen2.5:7b")
+    with patch("llm.ollama") as mock_ollama:
+        mock_ollama.list.return_value = {"models": []}
+        tip = llm.check_health()
+        assert "ollama pull qwen2.5:7b" in tip
+        assert "ollama create mathguide-qwen25-3b" not in tip
 
 
 def test_analyze_parses_json():
@@ -100,7 +111,7 @@ def test_tutor_repairs_invalid_status_before_returning():
 def test_tutor_invalid_status_fails_without_exposing_bad_reply():
     with patch("llm.ollama") as client:
         client.chat.return_value = {"message": {"content": "重复的错误标记"}}
-        with pytest.raises(llm.LLMError):
+        with pytest.raises(llm.LLMFormatError):
             list(llm.chat_stream([{"role": "system", "content": "[UNDERSTOOD]"}]))
 
 

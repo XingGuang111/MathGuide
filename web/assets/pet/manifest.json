@@ -1,0 +1,64 @@
+{
+  "repository": "https://github.com/PC2005-cloud/dsh-pet",
+  "commit": "ad9e2cb50348280634021e0699482f43b56ce1ca",
+  "license": "Non-commercial assets; see ASSET-NOTICE.md",
+  "character": "whale-tail maid",
+  "clips": {
+    "idle": {
+      "file": "idle.webm",
+      "source": "待机呼吸休闲.webm",
+      "sha256": "deb965d05a85dacf5ff4a20faa757846f0d11679598c3ec578a5571487660395",
+      "bytes": 441437
+    },
+    "touch": {
+      "file": "touch.webm",
+      "source": "点击回应-开心跃动.webm",
+      "sha256": "86dcb0c3dd7b651de9c107e927d57a5c4224599101706dbdcc782fa48bcd0ad7",
+      "bytes": 538110
+    },
+    "wave": {
+      "file": "wave.webm",
+      "source": "点击回应-元气挥手.webm",
+      "sha256": "48cd729ccdcf746369942ea954d242e9afdd5643e1dac3827fa5e67450eb8776",
+      "bytes": 421669
+    },
+    "drag": {
+      "file": "drag.webm",
+      "source": "被鼠标拖拽悬空反馈.webm",
+      "sha256": "31373a86026636eecc890db763760309360310eb095cf5575b13c9ca2a6cc80e",
+      "bytes": 464764
+    },
+    "eat": {
+      "file": "eat.webm",
+      "source": "大口吃零食.webm",
+      "sha256": "fdacb534a828b0c669f22a54e8da9bb9b5d731e0132dd5ea946f7badc9229a39",
+      "bytes": 806998
+    },
+    "play": {
+      "file": "play.webm",
+      "source": "三球抛接.webm",
+      "sha256": "a64c08a4b7e5c3549616faf9dcd418e17f156b4b72d906646e4d57067df70d23",
+      "bytes": 549316
+    },
+    "think": {
+      "file": "think.webm",
+      "source": "工作状态-思考冒泡.webm",
+      "sha256": "b4a36cfa28ea5d7089e362a01972c6e880297c6dcd0d39f1994efd889a3c1be5",
+      "bytes": 408849
+    },
+    "celebrate": {
+      "file": "celebrate.webm",
+      "source": "工作状态-雀跃庆祝.webm",
+      "sha256": "3ff681051a0bb4f152d7535d64b7f3194c30298bf56d41e521216a278f135d3e",
+      "bytes": 488024
+    },
+    "sleep": {
+      "file": "sleep.webm",
+      "source": "原地小憩沉眠.webm",
+      "sha256": "31d4a6b36a29b2a4fe097384173d3bbeb3fa2f40f526b13191791456bf7507a1",
+      "bytes": 433769
+    }
+  },
+  "code_license": "MIT",
+  "asset_notice": "ASSET-NOTICE.md"
+}

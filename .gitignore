@@ -27,7 +27,15 @@ data/*.sessions.tmp
 data/ai-settings.json
 *.log
 
-# PPT 构建临时目录（最终版 PPT 文件保留在仓库中）
+# 私人文档和演示材料：仅保留本地，不上传 GitHub
+*.[dD][oO][cC]
+*.[dD][oO][cC][xX]
+*.[pP][pP][tT]
+*.[pP][pP][tT][xX]
+docs/2026-2027-*/
+docs/四人讲解材料/
+
+# PPT 构建临时目录
 .pptx-build/
 .pptx-unpack/
 .codex-ppt/

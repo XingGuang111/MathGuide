@@ -157,7 +157,7 @@ ollama pull qwen2.5vl:3b
 
 ## 使用方式
 
-先看图了解操作流程：[MathGuide 产品使用说明（DOCX）](docs/MathGuide_产品使用说明.docx)，包含首次启动、题目辅导、家长布置作业、学生答题、学习档案和手机访问步骤。
+首次启动、题目辅导、作业与学习档案的操作见本 README。Word、PPT 和个人课程交付材料仅供本地使用，不随源码上传 GitHub。
 
 ### 网页入口
 
@@ -330,7 +330,7 @@ MathGuide/
 - 根目录 Python 文件、`web/`、`data/formulas.json`、`models/` 和上述教学资料是运行所需内容；`tests/` 与 `tools/` 用于验证、演示和素材维护。
 - `__pycache__/`、`.pytest_cache/` 和 `tmp/pytest/` 是可再生成的缓存、临时测试目录。本次整理清除了这些内容以及 `.codex-ppt/previews/`、`.codex-ppt/final-previews/` 的中间预览。
 - `data/` 中的数据库、会话快照和模型设置是实际使用数据；`.venv/` 是已安装的运行环境。清理项目时应保留。
-- `docs/` 的 DOCX、PPTX 和交付材料有独立用途；`output/`、`.pet-qa/` 中包含历史测试证据、截图和演示数据，不能仅因不参与运行就整目录删除。
+- Word、PPT 和个人课程交付目录已加入 `.gitignore`，不应提交；本地 Word 与正式路演稿可自行保留，中间演示文件可清理。`output/`、`.pet-qa/` 中的历史测试证据、截图和演示数据也不上传 GitHub。
 - `.codex-ppt/` 还包含演示制作脚本；其中 `node_modules` 可能链接到工作区外的共享依赖，不能跟随链接递归清理。生成产物、运行数据和缓存已由 `.gitignore` 排除。
 
 ## 开发与测试

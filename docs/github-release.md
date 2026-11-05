@@ -15,6 +15,8 @@
 - `docs/`：尤其是 `system prompt.txt`、`primary_math_tutor.jsonl`、`Dialogue Example.md`，以及 README 链接的文档。
 - `tests/` 和 `tools/`：便于复现验证与维护。
 
+Word、PPT、个人课程交付目录和中间演示产物不属于源码发布内容，已由 `.gitignore` 排除；即使是正式版，也只保留在本机。README 不应链接这些未发布的附件。
+
 不要发布个人数据库、会话快照、学生照片、私人测试记录、虚拟环境和本机缓存。模型权重不随源码上传，使用者按 README 从 Ollama 下载。
 
 ## 检查并提交

@@ -7,6 +7,7 @@ import agent as agent_mod
 import config
 import db
 import llm
+import model_settings
 import ocr
 
 KNOWN_COMMANDS = {"photo", "history", "stats", "new", "help", "quit"}
@@ -23,7 +24,7 @@ HELP = """可用命令：
   /quit               退出"""
 
 _BANNER = f"""{'=' * 50}
-  MathGuide 小学数学启发式辅导 (模型: {config.MODEL_NAME})
+  MathGuide 小学数学启发式辅导 (模型: {model_settings.model_name()})
   直接输入题目开始辅导；拍题用 /photo 图片路径
   /help 查看全部命令
 {'=' * 50}"""

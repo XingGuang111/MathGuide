@@ -1,8 +1,8 @@
 # MathGuide
 
-**面向小学生的本地 AI 数学辅导与学习陪伴系统。**
+**面向小学生的 AI 数学辅导与学习陪伴系统，支持本地和在线模型。**
 
-MathGuide 通过“读懂题意 → 寻找方法 → 列式计算”的分步对话，引导学生自主解题，并将作业、反思、错题与针对性练习连接起来。项目使用 Ollama 在本机运行大模型，提供浏览器界面和命令行入口，无需云端 API Key。
+MathGuide 通过“读懂题意 → 寻找方法 → 列式计算”的分步对话，引导学生自主解题，并将作业、反思、错题与针对性练习连接起来。项目默认使用 Ollama 在本机运行大模型，无需云端 API Key；也可在网页设置中接入在线或自定义模型服务。提供浏览器界面和命令行入口。
 
 ## 功能概览
 
@@ -17,6 +17,19 @@ MathGuide 通过“读懂题意 → 寻找方法 → 列式计算”的分步对
 模型、依赖和素材准备完成后，核心辅导可在本地运行。首次安装及模型下载需要联网；实际响应速度取决于硬件和所选模型。
 
 ## 快速启动
+
+### Windows 一键启动（推荐）
+
+安装 **Python 3.10 或以上**（勾选 **Add python.exe to PATH**），下载并解压项目后，双击根目录的 [`start.cmd`](start.cmd)。也可以在 PowerShell 执行 `.\start.cmd`。
+
+脚本会自动切换到项目目录，创建或复用 `.venv`，首次安装 `requirements.txt` 中的依赖，并在网页服务就绪后自动打开 **http://127.0.0.1:8000**。依赖清单改变或依赖检查失败时会重新安装；普通重复启动会跳过安装。首次安装需要联网，下载失败时窗口保留错误信息，可按下面的镜像说明手动安装后重试。
+
+- **使用本地模型**：首次先按第 4 步安装 Ollama、下载并创建文本模型；以后双击即可。当使用默认本机 Ollama 地址且命令可用时，脚本会尝试在后台启动 Ollama，不会自动下载模型。配图分析需要另行下载视觉模型。
+- **使用在线模型**：直接启动，在网页右上角 **AI 模型设置** 填写服务、模型和密钥；无需先安装 Ollama。
+- **停止服务**：保持启动窗口开启，使用结束按 `Ctrl+C`；若 CMD 询问是否终止批处理，输入 `Y`。后台 Ollama 服务会继续运行。
+- **端口被占用**：先关闭已运行的网页服务再启动；脚本不会结束其他程序。浏览器未自动打开时，可手动访问上述地址。
+
+macOS / Linux 或需要手动部署时，按以下步骤操作。
 
 ### 1. 准备运行环境
 
@@ -84,6 +97,8 @@ python3 -m venv .venv
 
 ### 4. 启动 Ollama 并准备文本模型
 
+本节用于本地模型。使用在线文字模型时，可以直接启动第 5 步的网页服务，再在右上角“AI 模型设置”中配置服务地址、模型和密钥；看图功能仍需要本地视觉模型。
+
 打开 Ollama 应用，或在单独的终端运行以下命令，并保持该终端开启：
 
 ```sh
@@ -138,9 +153,11 @@ ollama pull qwen2.5vl:3b
 
 根据老师的问题逐步回答已知条件、计算方法和结果。也可以进入“今日作业”录入清单，完成后在“学习档案”查看记录。
 
-按 `Ctrl+C` 停止网页服务。**以后启动**只需保证 Ollama 正在运行，在项目根目录重新执行第 5 步的命令，无需重复安装依赖或下载模型。
+按 `Ctrl+C` 停止网页服务。**以后启动**在 Windows 双击 `start.cmd`，或保证 Ollama 正在运行后重新执行第 5 步的命令，无需重复下载模型。
 
 ## 使用方式
+
+先看图了解操作流程：[MathGuide 产品使用说明（DOCX）](docs/MathGuide_产品使用说明.docx)，包含首次启动、题目辅导、家长布置作业、学生答题、学习档案和手机访问步骤。
 
 ### 网页入口
 
@@ -153,6 +170,22 @@ ollama pull qwen2.5vl:3b
 | API 文档 | [Swagger UI](http://127.0.0.1:8000/docs) |
 
 网页须通过运行中的服务访问，不要直接双击 `web/index.html`。
+
+### 选择本地或在线 AI 模型
+
+在运行服务的电脑上打开 `http://localhost:8000`，点击页面右上角 **AI 模型设置**：
+
+在 **服务地址** 下拉框选择 Ollama、DeepSeek、通义千问、LM Studio 或自定义服务，选中后显示对应地址，点击“修改”可编辑。填写密钥后获取模型列表，选择当前模型；多选和手动添加放在折叠的 **管理常用模型** 中，清除密钥和其他说明在 **更多设置与说明** 中。
+
+- **本地模型 · Ollama**：填写服务地址和已经下载的模型名称，默认沿用项目原有模型。
+- **在线 / 自定义服务 · 兼容接口**：填写 Base URL、模型名称和 API Key。支持提供 OpenAI 兼容 Chat Completions 接口的服务，包括 DeepSeek、通义千问和 LM Studio；不支持只有专有接口的服务。
+- 点击 **获取模型列表**：本地读取 Ollama 已安装模型；在线从填写的服务地址请求 `/models`，使用服务商返回的真实模型 ID。可勾选多个常用模型，在 **当前使用的常用模型** 下拉框切换，保存后生效；每次请求只使用当前模型。
+- DeepSeek、通义千问提供官方文档入口和地址预设。服务不支持模型列表接口时，可从官网查到 ID 后手动添加。获取列表不会发起对话；列表可能包含嵌入、图片等非聊天模型，选择后仍需测试。更换服务地址会清空页面中的旧候选列表和密钥输入。
+- 点击 **测试连接** 验证当前填写的配置，再点击 **保存并使用**。本地测试检查模型是否安装；在线测试会发送一条简短请求，可能消耗少量额度。
+
+保存后，无需重启；之后的题目辅导、作业文字分析、宠物聊天和命令行调用使用所选文字模型。看图分析仍使用 `config.py` 中的本地 `VISION_MODEL_NAME`。选择在线服务时，题目和对话会发送给服务商；只使用在线文字功能时可以跳过 Ollama 模型安装。
+
+配置保存在 `data/ai-settings.json`，已加入 Git 忽略。API Key 以明文保存在服务电脑的此文件中，页面只显示是否已保存，不回传密钥。留空保留同一地址的原密钥，更改地址需要重新填写，也可勾选清除。此设置对所有学习档案生效，只允许在服务电脑通过 localhost 或 127.0.0.1 修改；手机和平板使用已保存配置。
 
 ### 手机 / 平板访问
 
@@ -211,7 +244,7 @@ python -m uvicorn web_app:app --host 127.0.0.1 --port 8000
 | `ENABLE_MODEL_DIALOGUE` | `True` | 启用模型组织教学回复 |
 | `ENABLE_MODEL_OPENING` | `True` | 启用模型生成首次提问 |
 
-若更换模型，请先用 Ollama 下载或创建，再将 `MODEL_NAME` 改为 `ollama list` 中的完整名称。不同模型对 JSON 协议和教学提示词的遵循能力不同，需要重新验证效果。
+网页保存的模型设置优先于 `config.py` 的文本模型默认值。更换模型优先使用“AI 模型设置”；本地模型需先用 Ollama 下载或创建。不同模型对 JSON 协议和教学提示词的遵循能力不同，需要重新验证效果。
 
 教学规则与示例可直接维护，程序会在后续回复时读取更新：
 
@@ -233,14 +266,23 @@ python -m uvicorn web_app:app --host 127.0.0.1 --port 8000
 
 ```text
 MathGuide/
+├── start.cmd                # Windows 一键准备环境并启动网页
 ├── main.py                  # 命令行入口
 ├── web_app.py               # FastAPI 接口与网页入口
 ├── agent.py                 # 辅导状态机与会话流程
-├── llm.py / vision.py       # Ollama 文本与视觉模型调用
+├── llm.py / vision.py       # 文本任务调用与本地视觉模型调用
+├── model_gateway.py        # Ollama / OpenAI 兼容接口适配
+├── model_settings.py       # 文字模型选择、配置保存与读取
 ├── teaching.py              # 教学动作与学生状态
 ├── scaffolding.py           # 分步引导
 ├── prompts.py               # 提示词与模型协议
+├── tutor_profile.py         # 读取教学资料，选择当前阶段的示例
+├── student_input.py         # 分离题目与学生尝试，规范算式表达
+├── session_summary.py       # 从题目和已核验进度生成解题小笔记
+├── reply_guard.py           # 回复去重、追问目标检查
+├── understanding.py         # 累计已知条件与所求的读题证据
 ├── calculation.py           # 常见题型计算核验
+├── simple_work.py           # 其他受支持题型的计算核验
 ├── ocr.py                   # RapidOCR 图片识别
 ├── homework*.py             # 作业录入、分析与看图辅导
 ├── practice.py              # 专项练习
@@ -258,6 +300,38 @@ MathGuide/
 ```
 
 后端使用 **FastAPI + Uvicorn**，数据使用 **SQLite**，本地推理使用 **Ollama + Qwen2.5**，OCR 使用 **RapidOCR + ONNX Runtime**。前端不需要额外构建。
+
+## 提示词工程在哪里
+
+| 位置 | 负责什么 | 何时修改 |
+| --- | --- | --- |
+| [`docs/system prompt.txt`](docs/system%20prompt.txt) | 通用教学要求及读题、方法、计算三个阶段规则 | 调整教学原则、语气和阶段要求 |
+| [`docs/primary_math_tutor.jsonl`](docs/primary_math_tutor.jsonl) | 按阶段、知识点、动作分类的短示例与提示模板 | 增加不会、算错、缺单位等场景的引导示例 |
+| [`docs/Dialogue Example.md`](docs/Dialogue%20Example.md) | 完整对话参考；带 `tutor-example` 标记的片段可被程序读取 | 添加具体的多轮教学示例 |
+| [`tutor_profile.py`](tutor_profile.py) | 加载上述资料，选择相关示例，填充提示模板 | 调整示例选择、文件格式或热更新逻辑 |
+| [`prompts.py`](prompts.py) | 分类、知识卡生成、诊断、开场、分阶段对话、自然回复和完整讲解提示词 | 改模型本轮任务、输入上下文和输出格式 |
+| [`agent.py`](agent.py) | 拼入当前状态、历史与已确认事实；生成失败后的重写提示 | 改对话如何承接学生回答、核验失败后如何重试 |
+| [`teaching.py`](teaching.py)、[`scaffolding.py`](scaffolding.py)、[`reply_guard.py`](reply_guard.py) | 教学动作、拆小提示、防重复与回复约束 | 改教学策略或核验逻辑，需配套测试 |
+| [`homework_review.py`](homework_review.py) | 已提交作业的判定、解释与反思提示 | 改作业批改口径 |
+| [`homework_visual.py`](homework_visual.py)、[`visual_reasoning.py`](visual_reasoning.py) | 带图辅导、独立解图与复核提示 | 改看图题的提问和核对流程 |
+| [`pet_chat.py`](pet_chat.py) | 星芽角色、陪伴边界与鼓励用语 | 改宠物对话；它不负责数学判分 |
+| [`models/Modelfile.qwen25-mathguide`](models/Modelfile.qwen25-mathguide) | Ollama 消息模板、停止标记和采样参数 | 改本地模型封装后重新执行 `ollama create` |
+
+**从哪里开始：**改教学规则先看三个 `docs/` 资料文件；改“模型这一轮具体怎么说”重点看 `prompts.py` 的 `build_reply_messages()`；改为什么跳阶段、重复追问或拒绝回复，重点看 `agent.py`、`teaching.py` 和 `reply_guard.py`。
+
+可编辑资料通过 `tutor_profile.py` 的阶段上下文和提示模板参与流程，并非整份文档直接发送给模型。默认自然回复由 `build_reply_messages()` 结合学生原话、诊断、程序核验事实和本轮提示单独组装。修改 Python 代码后需重启服务；三个教学资料文件按文件变更重新读取，不涉及模型训练。
+
+例如，输入“长8厘米、宽3厘米，求面积。我想用加法”时，题目与尝试由 `student_input.py` 分离，受支持的题型由 `calculation.py` 核验，`agent.py` 选择下一步教学任务，模型组织措辞，`session_summary.py` 将已确认进度显示到小笔记。提示词不能代替计算核验。
+
+详细调用关系、JSON 与阶段标记的区别、修改后验证方法见 [提示词工程维护说明](docs/prompt-design.md)。
+
+## 文件整理与清理范围
+
+- 根目录 Python 文件、`web/`、`data/formulas.json`、`models/` 和上述教学资料是运行所需内容；`tests/` 与 `tools/` 用于验证、演示和素材维护。
+- `__pycache__/`、`.pytest_cache/` 和 `tmp/pytest/` 是可再生成的缓存、临时测试目录。本次整理清除了这些内容以及 `.codex-ppt/previews/`、`.codex-ppt/final-previews/` 的中间预览。
+- `data/` 中的数据库、会话快照和模型设置是实际使用数据；`.venv/` 是已安装的运行环境。清理项目时应保留。
+- `docs/` 的 DOCX、PPTX 和交付材料有独立用途；`output/`、`.pet-qa/` 中包含历史测试证据、截图和演示数据，不能仅因不参与运行就整目录删除。
+- `.codex-ppt/` 还包含演示制作脚本；其中 `node_modules` 可能链接到工作区外的共享依赖，不能跟随链接递归清理。生成产物、运行数据和缓存已由 `.gitignore` 排除。
 
 ## 开发与测试
 
@@ -278,6 +352,15 @@ MathGuide/
 ```
 
 自动化测试主要使用临时数据库和模型替身；测试通过不能替代真实模型效果验证。`tools/` 中的浏览器、模型和演示脚本有各自的环境要求，不是快速启动的必需步骤。历史测试结果以对应日期的文档为准，不代表当前版本已重新执行全部验证。
+
+修改教学对话后可先运行相关回归，再按需测试真实模型：
+
+```sh
+python -m pytest tests/test_prompts.py tests/test_tutor_profile.py tests/test_teaching.py tests/test_socratic_flow.py tests/test_rectangle_conversation.py tests/test_session_summary.py -q
+python tools/check_rectangle_conversation.py
+```
+
+第二条命令使用当前配置的真实文字模型，在线服务可能产生调用费用；它在 `output/rectangle-conversation/` 保存独立测试数据库和结果，不改正式学习数据库。覆盖错误加法、乘法算错后订正，以及分轮提交算式、得数、单位的对话。
 
 提交 Issue 时建议附上操作系统、Python / Ollama 版本、复现步骤及去除个人信息后的报错。提交代码前请运行相关测试，并同步更新使用说明。
 

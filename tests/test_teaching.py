@@ -249,7 +249,7 @@ def test_invalid_diagnosis_is_rejected(data):
 def test_llm_diagnosis_uses_short_json_request_and_no_user_facing_response():
     payload = dict(error_type='CALCULATION_ERROR', next_action='GUIDE_CALCULATION', confidence=0.9,
                    reason='已经列式，当前需要检查计算')
-    with patch('llm._diagnostic_client.chat', return_value={'message': {'content': json.dumps(payload)}}) as chat:
+    with patch('llm.model_gateway.chat', return_value={'message': {'content': json.dumps(payload)}}) as chat:
         diagnosis = llm.diagnose(QUESTION, [], '200×0.8=180', teaching.initial_state())
     assert diagnosis.error_type == 'CALCULATION_ERROR'
     schema = chat.call_args.kwargs['format']
@@ -259,11 +259,11 @@ def test_llm_diagnosis_uses_short_json_request_and_no_user_facing_response():
 
 
 def test_bad_diagnosis_response_falls_back_without_retries():
-    with patch('llm._diagnostic_client.chat', return_value={'message': {'content': '不是JSON'}}) as chat:
+    with patch('llm.model_gateway.chat', return_value={'message': {'content': '不是JSON'}}) as chat:
         assert llm.diagnose(QUESTION, [], '我试试', {}) is None
     chat.assert_called_once()
 
 
 def test_diagnosis_timeout_falls_back():
-    with patch('llm._diagnostic_client.chat', side_effect=TimeoutError('timeout')):
+    with patch('llm.model_gateway.chat', side_effect=TimeoutError('timeout')):
         assert llm.diagnose(QUESTION, [], '我试试', {}) is None

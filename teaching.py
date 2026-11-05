@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from fractions import Fraction
 
 import calculation
+import student_input
 
 
 ERROR_TYPES = frozenset(('READ_ERROR', 'CONCEPT_ERROR', 'RELATION_ERROR', 'OPERATION_ERROR',
@@ -91,7 +92,7 @@ class Work:
 
 
 def looks_like_work(student):
-    text = calculation.normalize(student).rstrip('。!！')
+    text = calculation.normalize(student_input.work_text(student)).rstrip('。!！')
     return bool(re.fullmatch(r'[\d.()%+*/÷−-]+(?:=\d+(?:\.\d+)?(?:元|平方(?:千米|厘米|毫米|米)|千米|厘米|毫米|米)?)?', text)
                 and re.search(r'[+*/÷−-]', text))
 
@@ -100,7 +101,7 @@ def assess_work(verified, student, previous_expression='', result_correct=False)
     if verified is None:
         return None
     response, complete, expression, correct = verified.guide(student, previous_expression, result_correct)
-    text = calculation.normalize(student).rstrip('。.!！')
+    text = calculation.normalize(student_input.work_text(student)).rstrip('。.!！')
     text = re.sub(r'^(?:面积=长\*宽|周长=\(长\+宽\)\*2)[，,；;]?', '', text)
     text = re.sub(r'^(?:面积|周长|现价|价格|答案)(?:是|为|=)', '', text)
     candidate = text.split('=', 1)[0]

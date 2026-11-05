@@ -15,6 +15,7 @@ from pydantic import BaseModel, ConfigDict, Field
 import config
 import db
 import llm
+import model_gateway
 import homework
 import visual_reasoning
 from review_quality import safe_analysis
@@ -98,7 +99,7 @@ def verify_arithmetic(question, answer):
 def analyze(question, answer):
     verified = verify_arithmetic(question, answer)
     try:
-        response = _client.chat(model=config.MODEL_NAME,
+        response = model_gateway.chat(client=_client, timeout=60, model=config.MODEL_NAME,
             messages=[{'role': 'system', 'content': SYSTEM},
                       {'role': 'user', 'content': json.dumps({'题目': question, '学生作答': answer, '程序核验': verified}, ensure_ascii=False)}],
             format=Analysis.model_json_schema(), options={'temperature': 0, 'num_predict': 900})

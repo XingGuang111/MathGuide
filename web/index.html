@@ -11,11 +11,12 @@
   </style>
   <link rel="stylesheet" href="/assets/playful.css">
   <link rel="stylesheet" href="/assets/homework.css">
+  <link rel="stylesheet" href="/assets/model-settings.css">
 </head>
 <body>
 <main class="shell">
   <div id="alert-banner" role="status" aria-live="polite"></div>
-  <header class="top"><div class="brand"><span class="brand-icon" aria-hidden="true">✦</span><div><h1>MathGuide<span class="brand-label">数学小天地</span></h1><p>和星芽一起，把小问号变成小星星！</p></div></div><div id="health" class="health" role="status">正在检查模型…</div></header>
+  <header class="top"><div class="brand"><span class="brand-icon" aria-hidden="true">✦</span><div><h1>MathGuide<span class="brand-label">数学小天地</span></h1><p>和星芽一起，把小问号变成小星星！</p></div></div><div class="model-settings-entry"><div id="health" class="health" role="status">正在检查模型…</div><button id="model-settings-open" type="button" class="secondary">⚙ AI 模型设置</button></div></header>
   <nav class="workspace-nav" aria-label="学习空间"><button id="tutor-tab" class="workspace-tab is-active" aria-pressed="true"><span aria-hidden="true">✎</span> 题目辅导</button><button id="learning-tab" class="workspace-tab" aria-pressed="false"><span aria-hidden="true">⚑</span> 学习档案 <span class="nav-dot"></span></button><button id="shop-tab" class="workspace-tab" aria-pressed="false"><span aria-hidden="true">♧</span> 商店</button><span class="workspace-caption">✧ 每一次思考，都算数。</span></nav>
   <div class="pet-entertainment-entry"><button id="pet-entertainment-open" type="button" class="secondary">🎈 娱乐模式</button></div>
   <div id="learning-demo-notice" class="learning-demo-notice" hidden><span class="demo-dot"></span><strong>演示档案</strong><span>以下为虚构学习轨迹，用于展示薄弱点分析与学习记录。</span></div>
@@ -130,6 +131,26 @@
     <div><button id="pet-entertainment-cancel" type="button" class="secondary">取消</button><button id="pet-entertainment-submit" type="submit">进入娱乐模式</button></div>
   </form>
 </dialog>
+<dialog id="model-settings-dialog" aria-labelledby="model-settings-title">
+  <form id="model-settings-form" autocomplete="off">
+    <header class="model-dialog-head"><div><h2 id="model-settings-title">AI 模型设置</h2><p>选好模型，开始一起思考。</p></div><button id="model-settings-close" type="button" aria-label="关闭模型设置">×</button></header>
+    <div class="model-dialog-body">
+      <label for="model-service">服务地址</label>
+      <select id="model-service"><option value="ollama">Ollama · 本地模型</option><option value="deepseek">DeepSeek</option><option value="qwen">通义千问 · 中国内地</option><option value="lmstudio">LM Studio · 本地服务</option><option value="custom">自定义兼容服务</option></select>
+      <div class="model-address-line"><code id="model-address-preview"></code><button id="model-address-edit" type="button" class="model-link-button">修改</button></div>
+      <div id="model-address-editor" hidden><label for="model-base-url">基础地址（Base URL）</label><input id="model-base-url" type="url" maxlength="500" placeholder="https://服务地址/v1"><p class="model-help">以服务商文档为准，不要添加 /chat/completions。</p></div>
+      <div id="model-key-section"><label for="model-api-key">API Key</label><input id="model-api-key" type="password" autocomplete="off" maxlength="4096" placeholder="输入服务商提供的密钥"></div>
+      <div class="model-label-row"><label for="model-active">当前模型</label><button id="model-list-fetch" type="button" class="model-link-button">获取模型列表</button></div>
+      <select id="model-active" required></select>
+      <p id="model-list-note" class="model-help" role="status"></p>
+      <details id="model-manage"><summary>管理常用模型 <span id="model-count"></span></summary><p class="model-help">可勾选多个，使用时选择其中一个。</p><div id="model-list" class="model-list" aria-label="勾选常用模型"></div><div class="model-manual"><input id="model-manual-name" maxlength="200" aria-label="手动添加模型 ID" placeholder="或输入官网提供的模型 ID"><button id="model-list-add" type="button" class="secondary">添加</button></div><a id="model-official-link" target="_blank" rel="noopener noreferrer">查看官方文档 ↗</a></details>
+      <details id="model-advanced"><summary>更多设置与说明</summary><label class="model-checkbox" id="model-clear-label"><input id="model-clear-key" type="checkbox"> 清除已保存的密钥</label><p class="model-help">密钥保存在服务电脑中，留空保留同一地址的已存密钥。更换地址需重新填写。</p><p id="model-vision-note" class="model-help"></p><p class="model-help">设置对所有学习档案生效。LM Studio 需先开启本地服务，地址与端口以软件显示为准。</p></details>
+      <p id="model-sharing-note" class="model-help">在线服务会接收题目和对话，可能产生费用。</p>
+    </div>
+    <footer class="model-dialog-footer"><p id="model-settings-status" role="status" aria-live="polite"></p><div class="model-actions"><button id="model-settings-test" type="button" class="secondary">测试连接</button><button id="model-settings-save" type="button">保存并使用</button></div></footer>
+  </form>
+</dialog>
 <script src="/assets/workspace.js"></script><script src="/pet.js"></script><script src="/assets/learning.js"></script><script src="/app.js"></script><script src="/assets/homework.js"></script>
+<script src="/assets/model-settings.js"></script>
 </body>
 </html>

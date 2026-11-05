@@ -9,7 +9,7 @@ from datetime import date as calendar_date
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi import FastAPI, File, HTTPException, Query, UploadFile, Request
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.concurrency import run_in_threadpool
 from fastapi.staticfiles import StaticFiles
@@ -19,6 +19,8 @@ import agent as agent_mod
 import config
 import db
 import llm
+import model_settings
+import model_gateway
 import ocr
 import practice
 import pet
@@ -129,6 +131,7 @@ def _restore():
             if tutor.question_card is None:
                 tutor.question_card = tutor.card
             tutor.refresh_question_card()
+            tutor.repair_saved_progress()
             if legacy:
                 # 旧快照没有当前阶段上下文，保留归档日志并重新确认题意。
                 tutor._enter_stage(agent_mod.AgentState.STAGE1_UNDERSTAND)
@@ -460,8 +463,46 @@ def index():
 @app.get("/api/health")
 def health():
     tip = llm.check_health()
-    return {"ok": tip is None, "message": tip or "Ollama 与模型已就绪。", "model": config.MODEL_NAME,
+    return {"ok": tip is None, "message": tip or "所选 AI 模型已就绪。", "model": model_settings.model_name(),
             "demo": bool(getattr(config, 'DEMO_MODE', False))}
+
+
+def _require_local_settings(request: Request):
+    # Configuration controls shared credentials and server-side destinations.
+    if not request.client or request.client.host not in ('127.0.0.1', '::1', 'testclient'):
+        raise HTTPException(403, '请在运行 MathGuide 的电脑上通过 localhost 打开模型设置。')
+    origin = request.headers.get('origin')
+    if origin and origin != str(request.base_url).rstrip('/'):
+        raise HTTPException(403, '请从 MathGuide 页面打开模型设置。')
+
+
+@app.get('/api/model-settings')
+def get_model_settings(request: Request):
+    _require_local_settings(request)
+    return model_settings.public()
+
+
+@app.put('/api/model-settings')
+def put_model_settings(payload: model_settings.SettingsRequest, request: Request):
+    _require_local_settings(request)
+    return model_settings.save(payload)
+
+
+@app.post('/api/model-settings/test')
+def test_model_settings(payload: model_settings.SettingsRequest, request: Request):
+    _require_local_settings(request)
+    settings = model_settings.candidate(payload)
+    tip = model_gateway.check_health(settings)
+    return {'ok': tip is None, 'message': tip or '连接成功，所选模型可以使用。'}
+
+
+@app.post('/api/model-settings/models')
+def list_setting_models(payload: model_settings.SettingsRequest, request: Request):
+    _require_local_settings(request)
+    try:
+        return {'models': model_gateway.list_models(model_settings.candidate(payload))}
+    except model_gateway.ModelConnectionError as exc:
+        raise HTTPException(502, str(exc)) from exc
 
 
 @app.get("/app.js", include_in_schema=False)

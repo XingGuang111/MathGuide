@@ -7,20 +7,23 @@ import config
 
 
 def test_check_health_ok():
-    with patch("llm.ollama") as mock_ollama:
+    with patch("model_gateway.ollama.Client") as factory:
+        mock_ollama = factory.return_value
         mock_ollama.list.return_value = {"models": [{"name": config.MODEL_NAME}]}
         assert llm.check_health() is None
 
 
 def test_check_health_service_down():
-    with patch("llm.ollama") as mock_ollama:
+    with patch("model_gateway.ollama.Client") as factory:
+        mock_ollama = factory.return_value
         mock_ollama.list.side_effect = ConnectionError("refused")
         tip = llm.check_health()
         assert "Ollama" in tip
 
 
 def test_check_health_model_missing():
-    with patch("llm.ollama") as mock_ollama:
+    with patch("model_gateway.ollama.Client") as factory:
+        mock_ollama = factory.return_value
         mock_ollama.list.return_value = {"models": [{"name": "other:7b"}]}
         tip = llm.check_health()
         assert "ollama pull qwen2.5:3b-instruct-q4_K_M" in tip
@@ -30,7 +33,8 @@ def test_check_health_model_missing():
 
 def test_check_health_alternative_model_missing(monkeypatch):
     monkeypatch.setattr(config, "MODEL_NAME", "qwen2.5:7b")
-    with patch("llm.ollama") as mock_ollama:
+    with patch("model_gateway.ollama.Client") as factory:
+        mock_ollama = factory.return_value
         mock_ollama.list.return_value = {"models": []}
         tip = llm.check_health()
         assert "ollama pull qwen2.5:7b" in tip

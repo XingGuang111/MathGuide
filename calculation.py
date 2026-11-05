@@ -1,6 +1,7 @@
 """保守的单步计算核验，不执行学生输入，不覆盖任意自然语言题。"""
 import re
 import unicodedata
+import student_input
 from dataclasses import dataclass
 from fractions import Fraction
 
@@ -9,7 +10,8 @@ UNITS = r"千米|厘米|毫米|米"
 
 
 def normalize(text):
-    return re.sub(r'\s+', '', unicodedata.normalize('NFKC', text)).replace('乘以', '*').replace('乘', '*').replace('×', '*').replace('加', '+').replace('等于', '=')
+    text = re.sub(r'\s+', '', unicodedata.normalize('NFKC', text)).replace('乘以', '*').replace('乘', '*').replace('×', '*').replace('加', '+').replace('等于', '=')
+    return re.sub(r'(?<=\d)[xX](?=\d)', '*', text)
 
 
 def display(number):
@@ -56,7 +58,7 @@ class Rectangle:
 
     def guide(self, student, previous_expression='', result_correct=False):
         """按算式、结果、单位逐步核验，也允许一次提交完整的正确解答。"""
-        text = normalize(student).rstrip('。.!！')
+        text = normalize(student_input.work_text(student)).rstrip('。.!！')
         # 只接受明确的数值或一个受控算式，不能把命令、多个答案或复杂句子当作证明。
         text = re.sub(r'^(?:面积=长\*宽|周长=\(长\+宽\)\*2)[，,；;]?', '', text)
         text = re.sub(r'^(?:面积|周长|答案)(?:是|为|=)', '', text)
@@ -80,10 +82,16 @@ class Rectangle:
         if not expression or not self.valid_expression(expression):
             prompt = ('请用题目的长和宽写出求面积的算式。' if self.area else
                       '请用题目的长和宽写出求周长的算式。')
+            if self.area and expression and '+' in expression:
+                prompt = ('你用了加法，但面积不能把长和宽相加，要看能铺满多少个1平方' + self.unit + '的小方格。'
+                          f'每排{display(self.length)}个，有{display(self.width)}排，可以怎样算一共有多少个？')
             return prompt, False, previous_expression, False
         if Fraction(answer) != self.answer:
             prompt = ('请再检查这一步的乘法计算，结果是多少？' if self.area else
                       '先算括号里的加法，再乘2，请重新检查结果。')
+            if self.area and self.width.denominator == 1 and 1 < self.width <= 5:
+                repeated = '+'.join([display(self.length)] * int(self.width))
+                prompt = f'列式{expression.replace("*", "×")}是对的，只需检查计算。{repeated}等于多少？'
             return prompt, False, expression, False
         if unit != self.answer_unit:
             prompt = ('面积的单位应是平方单位，请补上正确单位。' if self.area else
@@ -114,10 +122,11 @@ def rectangle(question, card):
     area = '面积' in text
     if card['id'] != (12 if area else 11):
         return None
-    shape = r'(?:一个)?长方形(?:花园|操场|纸片|地块|菜地)?'
+    shape = r'(?:一个|一张|一块)?长方形(?:花园|操场|纸片|卡纸|地块|菜地)?'
     dimension = rf'长(?:为|是|:)?{NUMBER}(?:{UNITS})[，,、]?宽(?:为|是|:)?{NUMBER}(?:{UNITS})'
-    target = r'[，,。]?(?:求|问|计算)?(?:它的|这个长方形的|长方形的|花园的)?(?:面积|周长)(?:是多少|有多大|有多长|是多大|是多长|为多少)?[？?。]?'
-    if not re.fullmatch(shape + dimension + target, text):
+    target = rf'[，,。]?(?:求|问|计算)?(?:它的|这个长方形的|长方形的|花园的)?(?:面积|周长)(?:是多少|有多大|有多长|是多大|是多长|为多少)?(?P<requested_unit>平方(?:{UNITS})|{UNITS})?[？?。]?'
+    parsed = re.fullmatch(shape + dimension + target, text)
+    if not parsed:
         return None
     # 排除额外数字、条件变化、多步任务，宁可不支持也不误算。
     if len(re.findall(NUMBER, text)) != 2 or any(t in text for t in ('增加', '减少', '扩大', '缩小', '剪', '剩', '比', '倍', '不', '至少', '最多')):
@@ -125,6 +134,8 @@ def rectangle(question, card):
     length = re.search(rf'长(?:为|是|:|：)?({NUMBER})({UNITS})', text)
     width = re.search(rf'宽(?:为|是|:|：)?({NUMBER})({UNITS})', text)
     if not length or not width or length[2] != width[2]:
+        return None
+    if parsed['requested_unit'] and parsed['requested_unit'] != ('平方' if area else '') + length[2]:
         return None
     a, b = Fraction(length[1]), Fraction(width[1])
     return Rectangle(a, b, length[2], area) if a > 0 and b > 0 else None

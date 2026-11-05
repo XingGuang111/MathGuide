@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Ollama 封装：健康检查、JSON 题目分析、流式对话"""
+"""统一模型调用：健康检查、JSON 题目分析、流式对话"""
 import json
 import re
 
@@ -8,6 +8,7 @@ import ollama
 import config
 import prompts
 import teaching
+import model_gateway
 
 
 _diagnostic_client = ollama.Client(timeout=config.DIAGNOSIS_TIMEOUT_SECONDS)
@@ -18,7 +19,7 @@ _pet_client = ollama.Client(timeout=config.PET_CHAT_TIMEOUT_SECONDS)
 def pet_reply(messages):
     """A short, bounded local-model conversation independent of tutor grading."""
     try:
-        response = _pet_client.chat(model=config.MODEL_NAME, messages=messages,
+        response = model_gateway.chat(client=_pet_client, timeout=config.PET_CHAT_TIMEOUT_SECONDS, model=config.MODEL_NAME, messages=messages,
             options={'temperature': 0.6, 'num_predict': 180})
         content = response['message']['content'].strip()
         content = re.sub(r'<think>.*?</think>', '', content, flags=re.S).strip()
@@ -26,7 +27,7 @@ def pet_reply(messages):
             raise ValueError('空回复')
         return content[:220]
     except Exception as exc:
-        raise LLMError('宠物对话暂时无法连接本地模型') from exc
+        raise LLMError('宠物对话暂时无法连接所选模型') from exc
 
 
 class LLMError(Exception):
@@ -40,7 +41,7 @@ class LLMFormatError(LLMError):
 def opening(question, draft):
     """首次开场只负责组织问句，不参与阶段通过或判分。"""
     try:
-        response = _opening_client.chat(model=config.MODEL_NAME,
+        response = model_gateway.chat(client=_opening_client, timeout=config.DIAGNOSIS_TIMEOUT_SECONDS, model=config.MODEL_NAME,
             messages=prompts.build_opening_messages(question, draft), format='json',
             options={'temperature': 0.4, 'num_predict': 160})
         data = json.loads(response['message']['content'])
@@ -51,29 +52,14 @@ def opening(question, draft):
 
 
 def check_health():
-    """启动检查：返回 None 表示正常；否则返回给用户的中文提示"""
-    try:
-        data = ollama.list()
-    except Exception:
-        return ("无法连接 Ollama 服务。\n"
-                "请先安装 Ollama（https://ollama.com/download）并启动它，然后重试。")
-    models = [m.get("model") or m.get("name", "") for m in data.get("models", [])]
-    if config.MODEL_NAME not in models:
-        if config.MODEL_NAME in {"mathguide-qwen25-3b", "mathguide-qwen25-3b:latest"}:
-            return (f"本地还没有模型 {config.MODEL_NAME}。\n"
-                    "请在项目根目录依次运行：\n"
-                    "ollama pull qwen2.5:3b-instruct-q4_K_M\n"
-                    "ollama create mathguide-qwen25-3b -f models/Modelfile.qwen25-mathguide")
-        return (f"本地还没有模型 {config.MODEL_NAME}。\n"
-                f"如果是 Ollama 模型库中的模型，请运行：ollama pull {config.MODEL_NAME}\n"
-                "如果是自定义模型，请先用对应的 Modelfile 创建，或检查 config.py 中的 MODEL_NAME。")
-    return None
+    """检查当前选择的文字模型。"""
+    return model_gateway.check_health()
 
 
 def compose_reply(messages):
     """Render a student-specific reply after diagnosis; no grading or stage tags."""
     try:
-        response = _diagnostic_client.chat(model=config.MODEL_NAME, messages=messages,
+        response = model_gateway.chat(client=_diagnostic_client, timeout=config.DIAGNOSIS_TIMEOUT_SECONDS, model=config.MODEL_NAME, messages=messages,
             format='json', options={'temperature': 0, 'num_predict': 384,
                                    'repeat_penalty': 1.12, 'repeat_last_n': 192})
         data = json.loads(response['message']['content'])
@@ -82,7 +68,7 @@ def compose_reply(messages):
             raise ValueError('缺少有效回复')
         return body.strip()
     except Exception as exc:
-        raise LLMError('本地模型暂时无法组织回复，请重试这一轮') from exc
+        raise LLMError('所选模型暂时无法组织回复，请重试这一轮') from exc
 
 
 def analyze(question_text, candidates):
@@ -92,7 +78,7 @@ def analyze(question_text, candidates):
     last_err = None
     for _ in range(1 + config.ANALYZE_RETRY):
         try:
-            resp = ollama.chat(
+            resp = model_gateway.chat(client=ollama,
                 model=config.MODEL_NAME,
                 messages=[{"role": "system", "content": prompts.ANALYZE_SYSTEM},
                           {"role": "user", "content": prompt}]
@@ -120,7 +106,7 @@ def analyze(question_text, candidates):
         except (KeyError, json.JSONDecodeError, TypeError) as e:
             last_err = e
         except Exception as e:
-            raise LLMError(f"调用本地大模型失败：{e}") from e
+            raise LLMError(f"调用 AI 模型失败：{e}") from e
     raise LLMError(f"大模型输出格式异常（已重试{config.ANALYZE_RETRY}次）：{last_err}")
 
 
@@ -135,7 +121,7 @@ def generate_formula(question_text):
     last_err = None
     for _ in range(1 + config.ANALYZE_RETRY):
         try:
-            resp = ollama.chat(
+            resp = model_gateway.chat(client=ollama,
                 model=config.MODEL_NAME,
                 messages=[{"role": "system", "content": prompts.GENERATE_FORMULA_SYSTEM},
                           {"role": "user", "content": prompt}]
@@ -170,14 +156,14 @@ def generate_formula(question_text):
         except (KeyError, json.JSONDecodeError, TypeError) as e:
             last_err = e
         except Exception as e:
-            raise LLMError(f"调用本地大模型失败：{e}") from e
+            raise LLMError(f"调用 AI 模型失败：{e}") from e
     raise LLMError(f"大模型输出格式异常（已重试{config.ANALYZE_RETRY}次）：{last_err}")
 
 
 def diagnose(question, messages, student, state):
     """Constrain diagnostic fields at generation; callers handle failure explicitly."""
     try:
-        response = _diagnostic_client.chat(
+        response = model_gateway.chat(client=_diagnostic_client, timeout=config.DIAGNOSIS_TIMEOUT_SECONDS,
             model=config.MODEL_NAME,
             messages=prompts.build_diagnosis_messages(question, messages, student, state),
             format={'type': 'object', 'properties': {
@@ -201,7 +187,7 @@ def chat_stream(messages):
         if tutor:
             request = list(messages)
             for attempt in range(2):
-                resp = ollama.chat(model=config.MODEL_NAME, messages=request,
+                resp = model_gateway.chat(client=ollama, model=config.MODEL_NAME, messages=request,
                                    options={"temperature": 0.2, "num_predict": 384,
                                             "repeat_penalty": 1.12, "repeat_last_n": 192})
                 content = resp["message"]["content"].strip()
@@ -212,7 +198,7 @@ def chat_stream(messages):
                 request = list(messages) + [{"role": "user", "content":
                     "请重新回复上一条学生消息。正文简短，只问一个问题；最后另起一行写[CONTINUE]或[UNDERSTOOD]，必须保留方括号，不加列表符号。不要因为此格式纠正判定学生已经学会。"}]
             raise LLMFormatError("辅导回复格式不符合约定，请重试")
-        stream = ollama.chat(
+        stream = model_gateway.chat(client=ollama,
             model=config.MODEL_NAME, messages=messages, stream=True,
             options={"temperature": 0.2, "num_predict": 512},
         )
@@ -223,4 +209,4 @@ def chat_stream(messages):
     except LLMError:
         raise
     except Exception as e:
-        raise LLMError(f"调用本地大模型失败：{e}") from e
+        raise LLMError(f"调用 AI 模型失败：{e}") from e

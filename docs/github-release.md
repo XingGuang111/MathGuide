@@ -8,6 +8,7 @@
 
 - 根目录全部 Python 模块，包括 `homework*.py`、`pet*.py`、`teaching.py` 等新模块。
 - `requirements.txt`、`requirements-dev.txt`、`README.md`、`LICENSE`、`.gitignore`。
+- `start.cmd`、`tools/start_web.py` 和 `.gitattributes`：Windows 一键启动入口、浏览器就绪检测与 CMD 换行设置。
 - `data/formulas.json`：首次运行初始化数据库所需的公式种子。
 - `models/Modelfile.qwen25-mathguide`：从公开模型创建本地辅导模型。
 - 完整 `web/`：页面、脚本、样式、宠物动画、商品图片、清单和来源声明。缺少 `web/assets/` 会使服务导入失败。
@@ -28,7 +29,7 @@ git status --short --ignored
 `??` 表示文件尚未纳入 Git；只使用 `git commit -am` 不会提交这些文件。检查待发布内容后，可以明确添加项目文件：
 
 ```sh
-git add -- *.py .gitignore README.md LICENSE requirements.txt requirements-dev.txt data/formulas.json models web docs tests tools
+git add -- *.py .gitignore .gitattributes start.cmd README.md LICENSE requirements.txt requirements-dev.txt data/formulas.json models web docs tests tools
 git diff --cached --stat
 git diff --cached --name-only
 ```

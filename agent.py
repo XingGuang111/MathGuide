@@ -20,6 +20,7 @@ import teaching
 import scaffolding
 import simple_work
 import reply_guard
+import student_input
 
 log = logging.getLogger(__name__)
 
@@ -185,6 +186,38 @@ class TutorAgent:
         elif kid == 49 or point == '移多补少':
             self.question_type = '计算题'
 
+    def repair_saved_progress(self):
+        """Recover evidence from old snapshots, never rewrite past replies or auto-archive."""
+        self.question_text, attempt = student_input.split_question(self.question_text)
+        if attempt and not any(m.get('role') == 'student' and m.get('content') == attempt for m in self.dialogue):
+            self.dialogue.insert(0, {'role': 'student', 'content': attempt})
+        verified = calculation.rectangle(self.question_text, self.question_card or self.card)
+        if not verified:
+            return
+        expression, correct = '', False
+        method = ''
+        for message in self.dialogue:
+            if message.get('role') != 'student':
+                continue
+            student = message['content']
+            if verified.valid_method(student):
+                method = student
+            work = teaching.assess_work(verified, student, expression, correct)
+            expression, correct = work.expression, work.result_correct
+            if work.complete:
+                self.teaching_state['known_facts']['answer_unit'] = verified.answer_unit
+            elif not correct or re.search(r'平方|厘米|毫米|千米|米', student):
+                self.teaching_state['known_facts'].pop('answer_unit', None)
+        if expression:
+            if self.state in GUIDING_STATES and self.state != AgentState.STAGE3_COMPUTE:
+                self._enter_stage(AgentState.STAGE3_COMPUTE)
+            self.compute_expression, self.compute_result_correct = expression, correct
+            for step in ('understand', 'method'):
+                if step not in self.teaching_state['confirmed_steps']:
+                    self.teaching_state['confirmed_steps'].append(step)
+        if method:
+            self.previous_stage_answer = method
+
     def _opening(self):
         draft = prompts.build_stage_opening(_STAGE_NAMES[self.state], self.question_text)
         if self.state == AgentState.STAGE1_UNDERSTAND and config.ENABLE_MODEL_OPENING:
@@ -219,9 +252,7 @@ class TutorAgent:
         """分析题目并准备辅导。返回 {"ok","card","question_type","message"}"""
         self.__init__(self.db_path)
         # 题目后已说明卡点时直接承接，不再问“哪里不懂”。
-        parts = re.split(r'(?<=[？?])\s*', question_text, maxsplit=1)
-        if len(parts) == 2 and re.search(r'不懂|不会|不知道|不明白|没明白|没读懂|看不懂|解释', parts[1]):
-            question_text, self.initial_student_msg = parts[0], parts[1]
+        question_text, self.initial_student_msg = student_input.split_question(question_text)
         self.question_text = question_text
         self.session_id = uuid.uuid4().hex
         self.state = AgentState.ANALYZING
@@ -310,7 +341,7 @@ class TutorAgent:
                 if self.state != AgentState.STAGE3_COMPUTE:
                     self._enter_stage(AgentState.STAGE3_COMPUTE, student_msg)
         if (self.state == AgentState.STAGE1_UNDERSTAND
-                and re.search(r'(?:不知道|不会).*(?:列式|用什么方法|用什么运算|怎么算)|知道.*(?:但|就是).*(?:不会|不知道).*(?:算|做)', student_msg)
+                and re.search(r'(?:不知道|不会).*(?:公式|列式|用什么方法|用什么运算|怎么算)|知道.*(?:但|就是).*(?:不会|不知道).*(?:算|做)', student_msg)
                 and not prompts.find_concept_term(self.question_text, student_msg)):
             self._enter_stage(AgentState.STAGE2_METHOD, student_msg)
         if (self.state != AgentState.STAGE3_COMPUTE and not self._needs_help(student_msg)
@@ -418,6 +449,10 @@ class TutorAgent:
             if not completed and not explained:
                 praise = re.sub(r'小例子[^。！？]*答对了', '', candidate)
                 valid = valid and not re.search(r'答对了|全部正确|这道题完成|已经掌握|最终答案', praise)
+                if ('面积不能把长和宽相加' in guidance
+                        and not re.search(r'加法|相加|加起来|加在一起', candidate)):
+                    valid = False
+                    problems.append('先回应学生用加法的尝试：明确说明面积不能把长和宽相加，再用小方格引导，不给最终得数。')
                 if self.teaching_state['error_type'] == 'CALCULATION_ERROR' and re.search(r'结果.{0,3}(?:对的|正确)|算对了|计算.{0,3}(?:正确|对的)', candidate):
                     valid = False
                     problems.append('学生的得数算错了，绝对不能说结果正确；只认可列式，然后提示检查计算。')
@@ -508,6 +543,15 @@ class TutorAgent:
         old_computation = (self.compute_expression, self.compute_result_correct)
         work = (teaching.assess_work(verified, student_msg, self.compute_expression, self.compute_result_correct)
                 if self.state == AgentState.STAGE3_COMPUTE else None)
+        # An old session may already contain a verified unit before a failed reply.
+        # A repeated correct numeric answer need not make the student supply it again.
+        if (work and work.result_correct and not work.complete
+                and isinstance(verified, calculation.Rectangle)
+                and old_teaching.get('known_facts', {}).get('answer_unit') == verified.answer_unit):
+            numeric_attempt = calculation.normalize(student_input.work_text(student_msg))
+            if re.fullmatch(rf'(?:[\d.()+*\-]+=)?{calculation.NUMBER}', numeric_attempt):
+                work = teaching.assess_work(verified, numeric_attempt + verified.answer_unit,
+                                           self.compute_expression, self.compute_result_correct)
         simple_result = (simple.guide(student_msg, self.compute_expression, self.compute_result_correct)
                          if simple and self.state == AgentState.STAGE3_COMPUTE else None)
         concept_term = prompts.find_concept_term(self.question_text, student_msg)
@@ -635,6 +679,10 @@ class TutorAgent:
             self.needs_practice = True
         if work and not substep_reply and not concept_term and not explained:
             self.compute_expression, self.compute_result_correct = work.expression, work.result_correct
+            if work.explicit_expression:
+                for step in ('understand', 'method'):
+                    if step not in self.teaching_state['confirmed_steps']:
+                        self.teaching_state['confirmed_steps'].append(step)
         if needs_help:
             self.help_counts[help_key] = level
             if sum(self.help_counts.values()) >= 2:

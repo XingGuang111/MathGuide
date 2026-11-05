@@ -42,7 +42,17 @@ def build(tutor):
                 conditions.append(dict(label='题目条件', value=clause, confirmed=False))
     if not target:
         target = facts.get('target', '')
-    method = tutor.previous_stage_answer if 'method' in steps else ''
+    method = ''
+    if 'method' in steps:
+        # A stage transition string can be just a unit; it is not method evidence.
+        candidates = [m['content'] for m in tutor.dialogue if m.get('role') == 'student']
+        candidates.append(tutor.previous_stage_answer)
+        if verified:
+            method = next((text for text in reversed(candidates) if verified.valid_method(text)), '')
+            if not method and tutor.compute_expression and isinstance(verified, calculation.Rectangle):
+                method = '长方形面积＝长×宽' if verified.area else '长方形周长＝（长＋宽）×2'
+        elif tutor.previous_stage_answer not in ('平方厘米', '平方米', '厘米', '米', '元'):
+            method = tutor.previous_stage_answer
     if not method and tutor.compute_expression:
         method = '数量关系已放进下面的算式。'
     labels = {'understand':'读懂题目', 'method':'找到方法', 'compute':'完成计算'}
@@ -57,6 +67,7 @@ def build(tutor):
             'STAGE3_COMPUTE': ('动手算算', '沿着已确认的思路，继续算式、结果或单位。'),
         }.get(tutor.state.value, ('准备开始', '先读一读题目。'))
     return dict(question=tutor.question_text, conditions=conditions,
+                shape='长方形' if isinstance(verified, calculation.Rectangle) else '',
                 target=target, target_confirmed='target' in facts,
                 method=method[:240], expression=tutor.compute_expression[:160],
                 completed=completed, status=status, next_step=next_step)

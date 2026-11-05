@@ -24,6 +24,7 @@ data/mathguide.db
 data/*.db
 data/*.sessions.json
 data/*.sessions.tmp
+data/ai-settings.json
 *.log
 
 # PPT 构建临时目录（最终版 PPT 文件保留在仓库中）

@@ -5,7 +5,8 @@ const chat=document.querySelector('#chat'), input=document.querySelector('#input
 const notesContent=document.querySelector('#thinking-notes-content');
 function showNotes(summary){
   if(!summary){notesContent.innerHTML='<p class="notes-empty">发来一道题，我会在这里记下条件、目标和已经确认的思路。</p>';return}
-  const conditions=(summary.conditions||[]).map(item=>`<li><span>${esc(item.label)}<strong>${esc(item.value)}</strong></span><small class="${item.confirmed?'is-confirmed':''}">${item.confirmed?'✓ 已确认':'题目给出'}</small></li>`).join('');
+  const rows=[...(summary.shape?[{label:'形状',value:summary.shape}]:[]),...(summary.conditions||[])];
+  const conditions=rows.map(item=>`<li><span>${esc(item.label)}<strong>${esc(item.value)}</strong></span><small class="${item.confirmed?'is-confirmed':''}">${item.confirmed?'✓ 已确认':'题目给出'}</small></li>`).join('');
   notesContent.innerHTML=`<p class="notes-stage">${esc(summary.status)}</p><details class="notes-question"><summary>回看本题</summary><p>${esc(summary.question)}</p></details>${conditions?`<div class="notes-section"><h4>题目告诉我们</h4><ul>${conditions}</ul></div>`:''}<div class="notes-section"><h4>我们要求什么${summary.target_confirmed?'<small>✓ 已确认</small>':''}</h4><p>${esc(summary.target||'还在一起读题，找出要求的内容。')}</p></div>${summary.method?`<div class="notes-section"><h4>已确认的思路</h4><p>${esc(summary.method)}</p></div>`:''}${summary.expression?`<div class="notes-section"><h4>已确认的算式</h4><p class="notes-expression">${esc(summary.expression)}</p></div>`:''}${summary.completed?.length?`<div class="notes-done">${summary.completed.map(step=>`<span>✓ ${esc(step)}</span>`).join('')}</div>`:''}<p class="notes-next">${esc(summary.next_step)}</p>`;
 }
 function clearQuestion(){

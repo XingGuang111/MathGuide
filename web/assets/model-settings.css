@@ -1,0 +1,40 @@
+.model-settings-entry{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+body:has(#model-settings-dialog[open]) #pet-overlay{display:none!important}
+#model-settings-dialog{width:min(480px,calc(100% - 28px));max-height:calc(100dvh - 40px);padding:0;overflow:hidden;border:1px solid #e7e0f0;border-radius:22px;background:#fffefa;color:#303447;box-shadow:0 24px 80px #24203935;font-size:14px}
+#model-settings-dialog::backdrop{background:#27233865;backdrop-filter:blur(3px)}
+#model-settings-form{display:flex;flex-direction:column;max-height:calc(100dvh - 42px)}
+#model-settings-dialog .model-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:22px 24px 14px}
+#model-settings-dialog h2{font-size:22px;color:#353146;margin:0;letter-spacing:.02em}
+#model-settings-dialog .model-dialog-head p{margin:6px 0 0;color:#87818f;font-size:13px}
+#model-settings-close{padding:0;width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#f2edf6;color:#797180;font-size:22px;line-height:1}
+#model-settings-dialog .model-dialog-body{padding:0 24px 14px;overflow-y:auto;min-height:0}
+#model-settings-dialog label{display:block;margin:12px 0 7px;font-weight:500}
+#model-settings-dialog input:not([type=checkbox]),#model-settings-dialog select{display:block;min-width:0;width:100%;padding:10px 12px;border:1px solid #e0dbe8;border-radius:10px;font:inherit;background:#fff;color:#353146;outline-offset:2px}
+#model-settings-dialog input:focus,#model-settings-dialog select:focus{outline:2px solid #b8a0e1}
+#model-settings-dialog .model-help{color:#89828f;font-size:12px;line-height:1.6;margin:8px 0}
+#model-settings-dialog [hidden]{display:none!important}
+#model-settings-dialog button:disabled{opacity:.55;cursor:wait}
+#model-settings-dialog .model-address-line{display:flex;gap:8px;align-items:flex-start;margin-top:7px}
+#model-address-preview{flex:1;min-width:0;overflow-wrap:anywhere;font-size:11px;line-height:1.6;color:#96909c}
+#model-settings-dialog .model-link-button{padding:0;background:transparent;color:#8461b8;font-size:12px;white-space:nowrap}
+#model-settings-dialog .model-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:4px}
+#model-settings-dialog details{border-top:1px solid #eee9f1;padding:11px 0}
+#model-settings-dialog summary{cursor:pointer;font-size:13px;color:#71677e}
+#model-count{color:#aaa0b4}
+#model-settings-dialog .model-list{max-height:155px;overflow:auto;border-radius:10px;background:#f7f4fa;margin:10px 0}
+#model-settings-dialog .model-list label{display:flex;gap:9px;align-items:center;margin:0;padding:8px 10px;font-size:13px;overflow-wrap:anywhere}
+#model-settings-dialog input[type=checkbox]{accent-color:#8762be;flex-shrink:0}
+#model-settings-dialog .model-manual{display:flex;gap:8px;margin:10px 0}
+#model-settings-dialog .model-manual input{flex:1;font-size:12px}
+#model-settings-dialog .model-manual button{padding:8px 14px;font-size:12px}
+#model-settings-dialog a{color:#8461b8;font-size:12px;text-decoration:none}
+#model-settings-dialog .model-checkbox{font-size:12px;color:#797180}
+#model-settings-dialog .model-dialog-footer{padding:12px 24px 20px;border-top:1px solid #eee9f1;background:#fffefa}
+#model-settings-status{font-size:12px;line-height:1.55;color:#797180;margin:0 0 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+#model-settings-status:empty,#model-list-note:empty{display:none}
+#model-settings-status[data-state=error]{color:#b34f58}
+#model-settings-status[data-state=success]{color:#258367}
+#model-settings-dialog .model-actions{display:flex;gap:10px;justify-content:flex-end}
+#model-settings-dialog .model-actions button{font-size:13px;padding:10px 20px;background:#8862bf;color:#fff}
+#model-settings-dialog .model-actions .secondary{background:#f1ebf8;color:#8461b8}
+@media(max-width:480px){#model-settings-dialog .model-dialog-head{padding:18px 18px 12px}#model-settings-dialog .model-dialog-body{padding:0 18px 12px}#model-settings-dialog .model-dialog-footer{padding:12px 18px 16px}}

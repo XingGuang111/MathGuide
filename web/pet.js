@@ -678,7 +678,7 @@
       const result = await request('/chat', {message: text, ...studyContext()});
       render(result.pet); addChat(result.reply, 'assistant'); message(result.reply);
       $('#pet-chat-status').textContent = result.source === 'fallback'
-        ? '本地模型暂时未连接，星芽使用备用鼓励回复。' : '由本地模型回复';
+        ? 'AI 模型暂时未连接，星芽使用备用鼓励回复。' : '由所选 AI 模型回复';
       setFeeling(result.pet.feeling || 'smile', {speak:false});
     } catch (error) {
       $('#pet-chat-status').textContent = error.message + '，内容已保留，可以重试。';
